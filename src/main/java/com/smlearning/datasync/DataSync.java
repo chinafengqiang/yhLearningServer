@@ -35,7 +35,11 @@ import com.smlearning.infrastructure.utils.DateUtil;
 import com.smlearning.infrastructure.utils.PageHelper;
 import com.smlearning.jdbc.DBUtils;
 import com.smlearning.jdbc.TableInfo;
-
+/**
+ * 
+ * @author FQ.CHINA
+ *
+ */
 public class DataSync implements IDataSync{
 
   @Resource
