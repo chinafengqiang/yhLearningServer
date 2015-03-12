@@ -1,5 +1,9 @@
 package com.smlearning.jdbc;
-
+/**
+ * 
+ * @author sara
+ *
+ */
 public interface TableInfo {
   String CHANNEL_NAME = "tbl_device_channel";
   
