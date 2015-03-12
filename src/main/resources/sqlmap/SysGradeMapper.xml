@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SysGradeMapper">
+	<select id="getOrgList" resultType="java.util.HashMap">        
+		<![CDATA[
+		select * from organ order by id
+		]]>
+	</select>
+	
+	<select id="getGradeList" resultType="java.util.HashMap">        
+		<![CDATA[
+			select g.*,org.name as orgName from sys_grade g left join organ org on g.org_id = org.id
+		]]>
+		<if test="sort != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<select id="getGradeById" resultType="java.util.HashMap">        
+		<![CDATA[
+		select * from sys_grade where id = #{id}     
+		]]>
+	</select>
+	
+	<delete id="deleteGrade">
+		delete from sys_grade where id = #{id}     	    
+	</delete>	
+	
+	<select id="getGradeByorgId" resultType="java.util.HashMap">        
+		<![CDATA[
+		select * from sys_grade where org_id = #{org_id} order by id
+		]]>
+	</select>
+	
+		
+	<select id="getAllGradeList" resultType="java.util.HashMap">        
+		<![CDATA[
+		select * from sys_grade order by id
+		]]>
+	</select>
+</mapper>

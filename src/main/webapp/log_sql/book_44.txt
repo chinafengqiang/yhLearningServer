@@ -1,0 +1,1 @@
+ insert into courseware (name, courseware_category_id, url, created_time, creator, pic) values (cae, 63, /uploadFile/file//uploadFile/file/»¯Ñ§±ØÐÞ.pdf, Mon Sep 01 14:07:16 CST 2014,1, /uploadFile/pic//uploadFile/pic/res2.jpg) 

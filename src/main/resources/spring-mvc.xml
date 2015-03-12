@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+http://www.springframework.org/schema/mvc 
+http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+	<context:component-scan base-package="com.smlearning.web.controller" />
+	<context:component-scan base-package="com.smlearning.datasync" />
+	<!-- Spring MVC JSON配置 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"> -->
+				<bean id="fastJsonHttpMessageConverter" class="com.smlearning.infrastructure.utils.FastJsonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value><!-- 避免IE出现下载JSON文件的情况 -->
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/" p:suffix=".jsp" />
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="maxUploadSize">
+			<value>104857600</value><!-- 上传文件大小限制为31M，31*1024*1024 32505856 -->
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+	
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.smlearning.web.interceptors.SecurityInterceptor">
+				<!-- 不需要权限验证的地址 -->
+				<property name="excludeUrls">
+					<list>
+						<value>/managerController/login.html</value><!-- 用户登录 -->
+						<value>/managerController/loginout.html</value><!-- 用户登录 -->
+						<value>/userController/login.html</value><!-- 学员登录 -->
+						<value>/coursewareController/dataGridBook.html</value><!-- 学员电子书 -->
+						<value>/courseController/dataGridBySchedule.html</value><!-- 课程进度表 -->
+						<value>/coursewareController/uploadFilePic.html</value><!-- 上传图片 -->
+						<value>/coursewareController/uploadFile.html</value><!-- 上传文件 -->
+						<value>/coursewareController/createNote.html</value><!-- 记事本 -->
+						<value>/courseController/getLesson.html</value><!-- 记事本 -->
+						<value>/coursewareController/dataGridCourseware.html</value><!-- 记事本 -->
+						<value>/courseController/getCourseByAll.html</value><!-- 课程-->
+						<value>/courseController/getCourseById.html</value><!-- 课程编号-->
+						<value>/coursewareController/queryNote.html</value><!-- 课程编号-->
+						<value>/courseController/queryCoursePlan.html</value><!-- 课程编号-->
+						<value>/coursewareController/dataGridHomework.html</value><!-- 课程编号-->
+						<value>/sysKeyController/createServerIP.html</value><!-- 课程编号-->
+						<value>/sysKeyController/getServerIP.html</value><!-- 课程编号-->
+						<value>/userController/downloadpdfApk.html</value><!-- 课程编号-->
+						<value>/userController/downloadApk.html</value><!-- 课程编号-->
+						<value>/sysMessageController/querySysMessage.html</value><!-- 课程编号-->
+						<value>/courseController/queryCourseTable.html</value><!-- 课程编号-->
+						<value>/courseController/queryClassBook.html</value><!-- 课程编号-->
+						<value>/coursewareController/queryCategory.html</value><!-- 课程编号-->
+						<value>/coursewareController/queryBookByCatetory.html</value><!-- 课程编号-->
+						<value>/sysMessageController/dataGridForum.html</value><!-- 课程编号-->
+						<value>/sysMessageController/createchildforum.html</value><!-- 课程编号-->
+						<value>/sysMessageController/dataGridChildForum.html</value><!-- 课程编号-->
+						<value>/managerController/loginManager.html</value><!-- 课程编号-->
+						<value>/sysMessageController/createChildUserForum.html</value><!-- 课程编号-->
+						<value>/sysMessageController/createmessage.html</value><!-- 课程编号-->
+						<value>/coursewareController/queryBookById.html</value><!-- 课程编号-->
+						<value>/sysKeyController/upload.html</value><!-- 课程编号-->
+						<value>/sysMessageController/dataGridMessage.html</value><!-- 课程编号-->
+						<value>/sysMessageController/createManagerForum.html</value><!-- 课程编号-->
+						<value>/coursewareController/swfupload.html</value><!-- 课程编号-->
+						<value>/coursewareController/dataGridAdditional.html</value><!-- 课程编号-->
+						<value>/coursewareController/dataGridLocal.html</value><!-- 课程编号-->
+						<value>/sysMessageController/updateMessage.html</value><!-- 课程编号-->
+						<value>/userController/getVersion.html</value><!-- 版本号-->
+						<value>/sysKeyController/dataGridClass.html</value><!-- 版本号-->
+						<value>/userController/createUserTestPaper.html</value><!-- 版本号-->
+						<value>/userController/queryUserTestPaper.html</value><!-- 版本号-->
+						<value>/userController/queryStudentByClassId.html</value><!-- 版本号-->
+						<value>/coursewareController/getPermBooks.html</value><!-- 获取有权限的电子书-->
+						<value>/coursewareController/getPermBooksCategory.html</value><!-- 获取有权限的电子书-->
+						<value>/courseController/getPermCourses.html</value><!-- 获取有权限的视频-->
+						<value>/courseController/getCoursePlan.html</value><!-- 获取有权限的视频-->
+						<value>/courseController/getPermLessons.html</value><!-- 获取有权限的课程表-->
+					</list> 
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+</beans>
