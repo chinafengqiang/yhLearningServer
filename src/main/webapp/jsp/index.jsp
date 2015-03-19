@@ -43,9 +43,12 @@
              {
                  "menuid": "3", "icon": "icon-sys", "menuname": "资源管理",
                  "menus": [
-                          { "menuid": "31", "menuname": "电子书分类管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/coursewareController/createBookNodeList.html" },
+                           
+{ "menuid": "31", "menuname": "教学资料管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/bookController/managerBook.html" }
+                          /*{ "menuid": "31", "menuname": "电子书分类管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/coursewareController/createBookNodeList.html" },
 						 { "menuid": "32", "menuname": "电子书资料", "icon": "icon-search", "url":"${pageContext.request.contextPath}/coursewareController/manageEbooks.html" },
-						 { "menuid": "33", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }
+						 { "menuid": "33", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }*/
+                          
                  ]
              },         
              {
