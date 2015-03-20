@@ -15,4 +15,6 @@ public interface TableInfo {
   String USER_NAME = "tbl_user";
   
   String USER_RULE_NAME = "tbl_user_object_rule";
+  
+  String BOOK_PART = "book_part";
 }

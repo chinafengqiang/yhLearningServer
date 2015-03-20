@@ -63,10 +63,8 @@ function Open(id,name) {
 }
 
 function gotofc(id,cname){
-
-	self.parent.addTab(globalGradeName+cname+'分册管理','${pageContext.request.contextPath}/bookController/managerBook.html','');
-	alert(id+"  "+globalGrade);
-	
+	var url = '${pageContext.request.contextPath}/bookController/managerBookpart.html?gradeId='+globalGrade+'&categoryId='+id;
+	self.parent.addTab(globalGradeName+cname+'分册管理',url,'');
 }
 </script>
 </head>
