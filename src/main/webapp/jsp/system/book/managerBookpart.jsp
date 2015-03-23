@@ -50,6 +50,11 @@ html>body {
 		getData();
 	});
 
+	
+	
+    //row.find("#ID").text(obj[i].CKRID); 
+
+	
 	function getData(){
 		var url = '${pageContext.request.contextPath}/bookController/getBookpart.html';
 		$.getJSON(url,{gradeId:gradeId,categoryId:categoryId},function(json){
