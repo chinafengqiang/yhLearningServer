@@ -47,9 +47,27 @@ html>body {
 	var categoryId = '${categoryId}';
 	
 	$(function() {
-
+		getData();
 	});
 
+	function getData(){
+		var url = '${pageContext.request.contextPath}/bookController/getBookpart.html';
+		$.getJSON(url,{gradeId:gradeId,categoryId:categoryId},function(json){
+			var size = json.length;
+			alert(json[0].NAME+"  "+json.length);
+			if(size > 0 && size%4 == 1){
+				var row = $("#dataTr").clone();
+				alert(row.find("#sp1").text());
+				row.appendTo("#dataTB");
+			}
+			
+		});
+	}
+	
+	function initTable(){
+		
+	}
+	
 	function searchList() {
 		var actualName = $("#actualName").val();
 		var name = $("#name").val();
@@ -170,6 +188,8 @@ html>body {
 		var url = "${pageContext.request.contextPath}/managerController/setUserPass.html";
 		setrow(url, 'dataGrid', 'id');
 	}
+	
+
 </script>
 </head>
 <body>
@@ -199,12 +219,12 @@ html>body {
 		</table>
 
 
-		<table style="width: 100%; margin-top: 20px;">
-			<tr align="center">
+		<table style="width: 100%; margin-top: 20px;" id="dataTB">
+			<tr align="center" id="dataTr">
 				<td>
 					<div style="position: relative; width: 124px; height: 175px;">
 						<img src="${pageContext.request.contextPath}/images/fm.png"
-							width="124" height="176" alt=""> <span
+							width="124" height="176" alt=""> <span id="sp1"
 							style="position: absolute; top: 60px; left: 5px; right: 5px; font-weight: bold;">
 							添加文字添加 </span>
 					</div>

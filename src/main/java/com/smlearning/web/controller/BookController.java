@@ -1,6 +1,7 @@
 package com.smlearning.web.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -61,5 +62,13 @@ public class BookController extends BaseController{
       json.setMsg(e.getMessage());
     }
     return json;
+  }
+  
+  @RequestMapping("/getBookpart")
+  @ResponseBody
+  public List<HashMap<String,Object>> getBookpart(HttpServletRequest request) {
+    int gradeId = ParamUtils.getIntParameter(request,"gradeId",0);
+    int categoryId = ParamUtils.getIntParameter(request,"categoryId",0);
+    return bookService.getBooKpart(gradeId, categoryId);
   }
 }

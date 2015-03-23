@@ -23,7 +23,7 @@
 								parent.$.messager.progress('close');
 								result = $.parseJSON(result);
 								if (result.success) {
-									
+									parent.$.loadData();
 									parent.$.modalDialog.handler
 											.dialog('close');
 								} else {
