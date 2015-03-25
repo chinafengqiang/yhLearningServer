@@ -4,5 +4,9 @@
 <mapper namespace="BookMapper">
 	<select id="getBookpart" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from book_part where GRADE_ID = #{GRADE_ID} and CATEGORY_ID = #{CATEGORY_ID}
-    </select> 
+    </select>
+    
+    	<select id="getBookpartById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_part where ID = #{Id}
+    </select>  
 </mapper>

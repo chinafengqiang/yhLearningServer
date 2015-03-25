@@ -46,18 +46,29 @@
 			<table class="table table-hover table-condensed">
 				
 				<tr>
-					<th>分册名称：</th>
+					<th>目录名称：</th>
 					<td>
-					<input name="GRADE_ID" type="hidden" value="${gradeId}">
-					<input name="CATEGORY_ID" type="hidden" value="${categoryId}">
-					<input name="NAME" type="text" placeholder="请输入分册名称"
+					<input name="PART_ID" type="hidden" value="${partId}">
+					<input name="PID" type="hidden" value="${pid}">
+					<input name="NAME" type="text" placeholder="请输入目录名称"
 						class="easyui-validatebox span2" data-options="required:true"
 						value="">
 						
 				  </td>
 					
 				</tr>
-	
+					<tr>
+					<th>是否上传资源：</th>
+					<td>
+					   <input type="hidden" id="IS_ADD_RES" name="IS_ADD_RES" value="0">
+					  <input type="checkbox" id="IS_ADD_RESV">
+			       <script type="text/javascript">
+			       attachCheckBox(document.getElementById("IS_ADD_RESV"),document.getElementById("IS_ADD_RES"));
+					</script>
+						
+				  </td>
+					
+				</tr>
 
 			</table>
 		</form>

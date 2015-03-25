@@ -64,6 +64,23 @@ public class BookController extends BaseController{
     return json;
   }
   
+  
+  @RequestMapping("/updateBookpart")
+  @ResponseBody
+  public Json updateBookpart(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+      HashMap<String,String> bookpart = ParamUtils.getParameters(request);
+      bookService.updateBookpart(bookpart);
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setSuccess(false);
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
+  
   @RequestMapping("/getBookpart")
   @ResponseBody
   public List<HashMap<String,Object>> getBookpart(HttpServletRequest request) {
@@ -71,4 +88,50 @@ public class BookController extends BaseController{
     int categoryId = ParamUtils.getIntParameter(request,"categoryId",0);
     return bookService.getBooKpart(gradeId, categoryId);
   }
+  
+  @RequestMapping("/editBookpart")
+  public ModelAndView editBookpart(HttpServletRequest request){
+      ModelAndView mv = new ModelAndView("jsp/system/book/editBookpart");
+      int id = ParamUtils.getIntParameter(request,"id",0);
+      HashMap<String,Object> bookpart = bookService.getBookpartById(id);
+      mv.addObject("bookpart",bookpart);
+      return mv;
+  }
+  
+  @RequestMapping("/deleteBookpart")
+  @ResponseBody
+  public Json deleteBookpart(HttpServletRequest request){
+    Json json = new Json();
+    try {
+      String ids = ParamUtils.getParameter(request, "ids","");
+      bookService.deleteBookpart(ids);
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setSuccess(false);
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
+  
+  @RequestMapping("/managerBookresource")
+  public ModelAndView managerBookresource(HttpServletRequest request){
+    ModelAndView mv = new ModelAndView("jsp/system/book/managerBookresource");
+    int partId = ParamUtils.getIntParameter(request,"partId",0);
+    String name = ParamUtils.getParameter(request, "name","");
+    mv.addObject("partId",partId);
+    mv.addObject("name",name);
+    return mv;
+  }
+  
+  @RequestMapping("/addBookresource")
+  public ModelAndView addBookresource(HttpServletRequest request){
+    ModelAndView mv = new ModelAndView("jsp/system/book/addBookresource");
+    int partId = ParamUtils.getIntParameter(request,"partId",0);
+    int pid = ParamUtils.getIntParameter(request,"pid",0);
+    mv.addObject("partId",partId);
+    mv.addObject("pid",pid);
+    return mv;
+  }
+  
 }
