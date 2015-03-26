@@ -1,5 +1,6 @@
 package com.smlearning.domain.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,9 +8,10 @@ import java.util.List;
  * 
  * 
  */
-public class Tree implements java.io.Serializable {
+public class Tree implements java.io.Serializable,Comparable<Tree>{
 
-	private String id;
+    private static final long serialVersionUID = -8643403005281289794L;
+    private String id;
 	private String text;
 	private String state = "open";// open,closed
 	private boolean checked = false;
@@ -17,6 +19,7 @@ public class Tree implements java.io.Serializable {
 	private List<Tree> children;
 	private String iconCls;
 	private String pid;
+	
 
 	public Tree(){}
 	
@@ -88,5 +91,24 @@ public class Tree implements java.io.Serializable {
 	public void setPid(String pid) {
 		this.pid = pid;
 	}
+	
 
+  public void addChild(Tree tree){
+	  if(children == null){
+	    children = new ArrayList<Tree>();
+	  }
+	  children.add(tree);
+	}
+
+  @Override
+  public int compareTo(Tree o) {
+    int localId = Integer.parseInt(this.id);
+    int oid = Integer.parseInt(o.getId());
+    if (localId > oid) {
+        return 1;
+    }
+    return -1;
+  }
+
+  
 }

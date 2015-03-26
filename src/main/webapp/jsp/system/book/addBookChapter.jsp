@@ -8,7 +8,7 @@
 		$('#form')
 				.form(
 						{
-							url : '${pageContext.request.contextPath}/bookController/createBookpart.html',
+							url : '${pageContext.request.contextPath}/bookController/createBookchapter.html',
 							onSubmit : function() {
 								parent.$.messager.progress({
 									title : '提示',
@@ -24,8 +24,7 @@
 								parent.$.messager.progress('close');
 								result = $.parseJSON(result);
 								if (result.success) {
-									//parent.frames[fsize-1].getData();
-									currTab.find('iframe').get(0).contentWindow.getData();
+									currTab.find('iframe').get(0).contentWindow.treeLoad();
 									parent.$.modalDialog.handler
 											.dialog('close');
 									

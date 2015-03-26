@@ -6,7 +6,15 @@
 		select * from book_part where GRADE_ID = #{GRADE_ID} and CATEGORY_ID = #{CATEGORY_ID}
     </select>
     
-    	<select id="getBookpartById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+    <select id="getBookpartById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from book_part where ID = #{Id}
+    </select>
+    
+    <select id="getBookchapterByPartId" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_chapter where PART_ID = #{PART_ID}
+    </select>  
+    
+    <select id="getBookResCategory" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_resource_category where IS_VALID = 1
     </select>  
 </mapper>

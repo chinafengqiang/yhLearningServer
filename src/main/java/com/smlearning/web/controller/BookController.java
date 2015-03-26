@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smlearning.application.service.BookService;
 import com.smlearning.domain.vo.CoursewareVO;
+import com.smlearning.domain.vo.Tree;
 import com.smlearning.infrastructure.utils.Json;
 import com.smlearning.infrastructure.utils.ParamUtils;
 
@@ -124,14 +125,40 @@ public class BookController extends BaseController{
     return mv;
   }
   
-  @RequestMapping("/addBookresource")
-  public ModelAndView addBookresource(HttpServletRequest request){
-    ModelAndView mv = new ModelAndView("jsp/system/book/addBookresource");
+  @RequestMapping("/addBookChapter")
+  public ModelAndView addBookChapter(HttpServletRequest request){
+    ModelAndView mv = new ModelAndView("jsp/system/book/addBookChapter");
     int partId = ParamUtils.getIntParameter(request,"partId",0);
     int pid = ParamUtils.getIntParameter(request,"pid",0);
     mv.addObject("partId",partId);
     mv.addObject("pid",pid);
     return mv;
   }
+  
+  
+  
+  @RequestMapping("/createBookchapter")
+  @ResponseBody
+  public Json createBookchapter(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+      HashMap<String,String> bookchater = ParamUtils.getParameters(request);
+      bookService.createBookchapter(bookchater);
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setSuccess(false);
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
+  @RequestMapping("/getChapterTreeJson")
+  @ResponseBody
+  public List<Tree> getChapterTreeJson(HttpServletRequest request){
+    int partId = ParamUtils.getIntParameter(request, "partId",0);
+    String rootName = ParamUtils.getParameter(request, "rootName","");
+    return bookService.getChapterTreeJson(partId,rootName);
+  }
+  
   
 }

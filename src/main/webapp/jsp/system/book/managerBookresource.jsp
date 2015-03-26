@@ -19,6 +19,8 @@
 <script type="text/javascript">
 var partId = '${partId}';
 var partName = '${name}';
+var encPartName = encodeURI(partName);
+var pid = -1;
 $(function () {
     //动态菜单数据
     
@@ -30,31 +32,53 @@ $(function () {
         	Open(node.id);
         }
     });*/
-    $('#tree').tree({
-    	checkbox: false,
-    	url: "${pageContext.request.contextPath}/sysGradeController/getGradeTreeJson.html",
-    	animate:true,
-    	lines:true,
-    	onClick:function(node){
-    		Open(node.id,node.text);
-    	},
-    	onBeforeExpand:function(node,param){                       
-    		//$('#taskTree').tree('options').url = ctx + "/rims/rescue/loadRescueTaskTreeRootNodes.do?parentId="+node.id;                
-    	}
-    });
-    
+
+	initTree();
 
 });
 
+function initTree(){
+	   $('#tree').tree({
+	    	checkbox: false,
+	    	url: "${pageContext.request.contextPath}/bookController/getChapterTreeJson.html?partId="+partId+"&rootName="+encPartName,
+	    	animate:true,
+	    	lines:true,
+	    	onClick:function(node){
+	    		var isAdd = node.attributes.isAddRes;
+	    		if(isAdd == 2){
+	    			initResData();
+	    			pid = -1;
+	    		}else{
+	    			Open(node.id,node.text);
+	    		}
+	    		
+	    	},
+	    	onBeforeExpand:function(node,param){                       
+	    		//$('#taskTree').tree('options').url = ctx + "/rims/rescue/loadRescueTaskTreeRootNodes.do?parentId="+node.id;                
+	    	}
+	    });
+}
+
 function Open(id,name) {
-	alert(id);
+	pid = id;
 	
 }
 
+function treeLoad(){
+	initTree();
+}
+
+function initResData(){
+	alert("init res");
+}
 
 //添加
 function addFun() {
-	var url = '${pageContext.request.contextPath}/bookController/addBookresource.html?partId='+partId;
+	if(pid < 0){
+		alert("请选择下方目录进行添加");
+		return;
+	}
+	var url = '${pageContext.request.contextPath}/bookController/addBookChapter.html?partId='+partId+"&pid="+pid;
 	parent.$.modalDialog({
 				title : '添加目录',
 				width : 400,
@@ -90,7 +114,7 @@ function addFun() {
 
 	<div data-options="region:'center',border:false" id="flList">
 		<table id="dataGrid">
-			<h2 id="titleId" align="center" >请点击左侧年级进行教学资源的管理！</h2>
+			<h2 id="titleId" align="center" >请点击左侧课堂板书、补充资料、课后练习及其他获取资源！</h2>
 		</table>
 	
 	</div>

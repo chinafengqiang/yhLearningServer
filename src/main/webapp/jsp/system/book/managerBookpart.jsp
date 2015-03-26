@@ -112,12 +112,6 @@ html>body {
 
 	//添加
 	function addFun() {
-
-		var obj = $("input:checked");
-		$.each(obj, function(i, item) {
-			alert($(this).val());
-		});
-
 		var url = '${pageContext.request.contextPath}/bookController/addBookpart.html?gradeId='
 				+ gradeId + "&categoryId=" + categoryId;
 		parent.$.modalDialog({
