@@ -9,15 +9,22 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.iactive.db.DataGridModel;
 import cn.com.iactive.db.IACDB;
 
 import com.smlearning.application.service.BookService;
+import com.smlearning.domain.entity.enums.CourseUseTypeEnum;
+import com.smlearning.domain.entity.enums.CoursewareSendStatusEnum;
 import com.smlearning.domain.vo.Tree;
 import com.smlearning.jdbc.TableInfo;
 
 @Service
 public class BookServiceImpl implements BookService {
-
+    /**
+     * 上传电子书路径名称
+     */
+    private final static String RES_FILE_PATH = "/uploadFile/file/";
+    
     @Autowired
     private IACDB<HashMap<String, Object>> iacDB;
 
@@ -132,6 +139,7 @@ public class BookServiceImpl implements BookService {
                    temp.setPid(tree.getId());
                    tempAttMap = new HashMap<String,String>();
                    tempAttMap.put("isAddRes", "2");
+                   tempAttMap.put("pid",tree.getId());
                    temp.setAttributes(tempAttMap);
                    childList.add(temp);
                  }
@@ -158,9 +166,173 @@ public class BookServiceImpl implements BookService {
     public List<HashMap<String, Object>> getBookResCategory() {
       return iacDB.getList("getBookResCategory");
     }
+
+
+
+    @Override
+    public HashMap<String, Object> getBookchapterById(int id) {
+      return iacDB.get("getBookchapterById", id);
+    }
+
+
+
+    @Override
+    public void updateBookchapter(HashMap<String, String> bookchapter) {
+      iacDB.updateDynamic(TableInfo.BOOK_CHAPTER,"ID",bookchapter);
+    }
+
+
+
+    @Override
+    public void deleteBookchapter(int id) {
+      HashMap<String,Object> params = new HashMap<String,Object>();
+      // TODO 删除此目录下所有电子书
+      
+      //删除目录下的子目录
+      params.clear();
+      params.put("PID", id);
+      iacDB.deleteDynamic(TableInfo.BOOK_CHAPTER,params);
+      //删除此目录
+      params.clear();
+      params.put("ID", id);
+      iacDB.deleteDynamic(TableInfo.BOOK_CHAPTER,params);
+    }
+
+
+
+    @Override
+    public long createBookRes(HashMap<String, String> bookres) {
+        bookres.put("url",RES_FILE_PATH+bookres.get("url"));
+        return iacDB.insertDynamicRInt(TableInfo.BOOK_RESOURCE, bookres);
+    }
+
+
+
+    @Override
+    public HashMap<String, Object> getBookResList(DataGridModel dm, HashMap<String, String> params) {
+      HashMap<String,Object> search = new HashMap<String, Object>();
+      String startTime = params.get("startTime");
+      String endTime = params.get("endTime");
+      String name = params.get("name");
+      String gradeId = params.get("gradeId");
+      String category = params.get("category");
+      String status = params.get("status");
+      
+      search.put("courseware_category_id",params.get("courseware_category_id"));
+      search.put("class_id",params.get("class_id"));
+      
+      if(StringUtils.isNotBlank(startTime)){
+          search.put("startTime", startTime);
+      }
+      if(StringUtils.isNotBlank(endTime)){
+          search.put("endTime", endTime);
+      }
+      if(StringUtils.isNotBlank(name)){
+          search.put("name", name);
+      }
+      if(StringUtils.isNotBlank(gradeId)&&Integer.parseInt(gradeId) > -1){
+          search.put("gradeId", gradeId);
+      }
+      if(StringUtils.isNotBlank(category)&&Integer.parseInt(category) > -1){
+          search.put("category", category);
+      }
+      if(StringUtils.isNotBlank(status)&&Integer.parseInt(status) > -1){
+          search.put("status", status);
+      }
+      return iacDB.getDataGrid("getBookResList",dm,search);
+    }
+
+
+
+    @Override
+    public HashMap<String, Object> getBookResById(int id) {
+      return iacDB.get("getBookResById", id);
+    }
+
+
+
+    @Override
+    public void updateBookres(HashMap<String, String> bookres) {
+      String url = bookres.get("url");
+      if(url.contains("uploadFile")){
+        
+      } else{
+        url = RES_FILE_PATH+url;
+      }
+      bookres.put("url",url);
+      iacDB.updateDynamic(TableInfo.BOOK_RESOURCE,"id",bookres);
+    }
     
     
+    public void deleteBookRes(String ids) {
+      if(StringUtils.isNotBlank(ids)){
+        List<String> pkList = new ArrayList<String>();
+        String[] idArr = ids.split(",");
+        for (String id : idArr) {
+          if(StringUtils.isNotBlank(id)){
+            pkList.add(id);
+          }
+        }
+        iacDB.deleteBatchDynamic(TableInfo.BOOK_RESOURCE,"id",pkList);
+      }
+      
+  }
+
+
+
+    @Override
+    public void updateBookResSendStatus(int id) {
+      HashMap<String,String> params = new HashMap<String,String>();
+      params.put("id", id+"");
+      params.put("status",CoursewareSendStatusEnum.SENDED.toValue()+"");
+      iacDB.updateDynamic(TableInfo.BOOK_RESOURCE,"id", params);
+    }
+
+    
+
+
+    @Override
+    public void updateBookResSendStatus(String ids) {
+      if(StringUtils.isNotBlank(ids)){
+        String[] arr = ids.split(",");
+        for(String id : arr){
+          if(StringUtils.isNotBlank(id)&&!"null".equals(id)){
+            updateBookResSendStatus(Integer.parseInt(id));
+          }
+        }
+      }
+    }
+
+
+
+    @Override
+    public List<HashMap<String, Object>> getBookResListByIds(String ids) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("ids",ids);
+      List<HashMap<String,Object>> mapList = iacDB.getList("getBookResListByIds",params);
+      return mapList;
+    }
+
+
+
+    @Override
+    public List<HashMap<String, Object>> getPermBookCategory(int gradeId) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("GRADE_ID",gradeId);
+      return iacDB.getList("getPermBookCategory", params);
+    }
+
+
+
+    @Override
+    public List<HashMap<String, Object>> getPermBookPart(int gradeId, int categoryId) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("GRADE_ID",gradeId);
+      params.put("CATEGORY_ID",categoryId);
+      return iacDB.getList("getPermBookPart", params);
+    }
     
     
 
+    
 }

@@ -17,4 +17,50 @@
     <select id="getBookResCategory" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from book_resource_category where IS_VALID = 1
     </select>  
+    
+    <select id="getBookchapterById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_chapter where ID = #{ID}
+    </select>  
+    
+    <select id="getBookResList" resultType="java.util.HashMap">
+  	select  a.id, a.status,  a.name, a.url, a.created_time as strCreateTime
+    from  courseware a
+    where a.class_id=#{class_id} and a.courseware_category_id = #{courseware_category_id}
+    <if test="name != null  and  name !='' " >
+    		and a.name  LIKE CONCAT(CONCAT('%', #{name}),'%')
+    </if>
+    <if test="startTime != null  and  startTime !=''" >
+    		and a.created_time > #{startTime} 
+    </if>
+        <if test="endTime != null  and  endTime !=''" >
+    <![CDATA[	and a.created_time < #{endTime} ]]>
+    </if>
+       <if test="gradeId != null" >
+    		and a.grade_id = #{gradeId}
+    </if>
+    <if test="status != null" >
+    		and a.status = #{status}
+    </if>
+    <if test="sort != null" >
+      order by ${sort} ${order}
+    </if>
+  </select>
+  
+   <select id="getBookResById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from courseware where id = #{id}
+   </select>
+    
+  <select id="getBookResListByIds" resultType="java.util.HashMap">
+   	select * from courseware where id in ( ${ids} )
+  </select>
+  
+   <select id="getPermBookCategory" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+       SELECT  DISTINCT cc.id,cc.name FROM courseware_category cc INNER JOIN book_part bp ON cc.id = bp.CATEGORY_ID
+       WHERE  bp.GRADE_ID = #{GRADE_ID}
+   </select>
+   
+   <select id="getPermBookPart" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+       SELECT * from book_part where GRADE_ID = #{GRADE_ID} and CATEGORY_ID = #{CATEGORY_ID}
+   </select>
+   
 </mapper>

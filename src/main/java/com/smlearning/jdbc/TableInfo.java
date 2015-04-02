@@ -19,4 +19,6 @@ public interface TableInfo {
   String BOOK_PART = "book_part";
   
   String BOOK_CHAPTER = "book_chapter";
+  
+  String BOOK_RESOURCE = "courseware";
 }
