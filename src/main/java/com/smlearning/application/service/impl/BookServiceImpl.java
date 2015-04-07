@@ -1,9 +1,11 @@
 package com.smlearning.application.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,13 +98,25 @@ public class BookServiceImpl implements BookService {
       if(treeMap != null){
           List<Tree> childList = new ArrayList<Tree>();
           Tree tree;
-          for(Tree t : treeMap.values()){
+          /*for(Tree t : treeMap.values()){
+            if((tree = treeMap.get(t.getPid()+""))!=null){
+              tree.addChild(t);
+            }
+            if(Integer.parseInt(t.getPid()) == 0)
+              childList.add(t);
+          }*/
+          
+          Object[] key_arr = treeMap.keySet().toArray();
+          Arrays.sort(key_arr); 
+          for  (Object key : key_arr) {  
+            Tree t = treeMap.get(key);
             if((tree = treeMap.get(t.getPid()+""))!=null){
               tree.addChild(t);
             }
             if(Integer.parseInt(t.getPid()) == 0)
               childList.add(t);
           }
+          
           Collections.sort(childList);
           rootTree.setChildren(childList);
       }
@@ -149,6 +163,7 @@ public class BookServiceImpl implements BookService {
              treeMap.put(id+"",tree);
           }
       }
+      
       return treeMap;
     }
     
@@ -316,7 +331,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<HashMap<String, Object>> getPermBookCategory(int gradeId) {
+    public List<HashMap<String, Object>> getPermBookCategory(long gradeId) {
       HashMap<String,Object> params = new HashMap<String, Object>();
       params.put("GRADE_ID",gradeId);
       return iacDB.getList("getPermBookCategory", params);
@@ -325,11 +340,32 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<HashMap<String, Object>> getPermBookPart(int gradeId, int categoryId) {
+    public List<HashMap<String, Object>> getPermBookPart(long gradeId, int categoryId) {
       HashMap<String,Object> params = new HashMap<String, Object>();
       params.put("GRADE_ID",gradeId);
       params.put("CATEGORY_ID",categoryId);
       return iacDB.getList("getPermBookPart", params);
+    }
+
+
+
+    @Override
+    public List<HashMap<String, Object>> getBookchapterByPartIdAndPid(int pid, int partId) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("PART_ID",partId);
+      params.put("PID",pid);
+      return iacDB.getList("getBookchapterByPartIdAndPid", params);
+
+    }
+
+
+
+    @Override
+    public List<HashMap<String, Object>> getBookResByPartIdAndCategoryId(int partId, int categoryId) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("partId",partId);
+      params.put("categoryId",categoryId);
+      return iacDB.getList("getBookResByPartIdAndCategoryId", params);
     }
     
     

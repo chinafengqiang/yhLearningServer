@@ -15,7 +15,7 @@
     </select>  
     
     <select id="getBookResCategory" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
-		select * from book_resource_category where IS_VALID = 1
+		select * from book_resource_category where IS_VALID = 1 order by LEVEL
     </select>  
     
     <select id="getBookchapterById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
@@ -63,4 +63,13 @@
        SELECT * from book_part where GRADE_ID = #{GRADE_ID} and CATEGORY_ID = #{CATEGORY_ID}
    </select>
    
+   <select id="getBookchapterByPartIdAndPid" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_chapter where PART_ID = #{PART_ID} and PID = #{PID}
+   </select>  
+   
+   <select id="getBookResByPartIdAndCategoryId" resultType="java.util.HashMap">
+  	select id,name,url,created_time
+    from  courseware
+    where class_id=#{partId} and courseware_category_id = #{categoryId} order by id desc
+   </select>
 </mapper>

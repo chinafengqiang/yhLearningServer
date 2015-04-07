@@ -31,4 +31,6 @@ public interface SysGradeService {
 	public List<Tree> getGradeAndClassTreeJson(String checkIds);
 	
 	public List<HashMap<String,Object>> getAllClass();
+	
+	public long getUserGradeId(int classId);
 }

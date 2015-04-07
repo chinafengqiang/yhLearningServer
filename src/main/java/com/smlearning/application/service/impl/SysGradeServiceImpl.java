@@ -195,6 +195,21 @@ public class SysGradeServiceImpl implements SysGradeService {
     }
     return resMap;
   }
+
+  @Override
+  public long getUserGradeId(int classId) {
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("classId",classId);
+    long gradeId = -1;
+    HashMap<String,Object> sysclass = iacDB.get("getSysClass",params);
+    if(sysclass != null){
+      Long gradeIdLg = (Long)sysclass.get("grade_id");
+      if(gradeIdLg != null){
+        gradeId = gradeIdLg.longValue();
+      }
+    }
+    return gradeId;
+  }
   
   
 

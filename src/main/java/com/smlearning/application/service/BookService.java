@@ -49,9 +49,12 @@ public interface BookService {
   
   public List<HashMap<String, Object>> getBookResListByIds(String ids);
   
-  public List<HashMap<String, Object>> getPermBookCategory(int gradeId);
+  public List<HashMap<String, Object>> getPermBookCategory(long gradeId);
   
-  public List<HashMap<String, Object>> getPermBookPart(int gradeId,int categoryId);
+  public List<HashMap<String, Object>> getPermBookPart(long gradeId,int categoryId);
   
+  public List<HashMap<String, Object>> getBookchapterByPartIdAndPid(int pid,int partId);
+  
+  public List<HashMap<String, Object>> getBookResByPartIdAndCategoryId(int partId,int categoryId);
   
 }
