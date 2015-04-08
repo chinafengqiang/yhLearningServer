@@ -1,6 +1,7 @@
 package com.smlearning.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smlearning.application.service.BookService;
 import com.smlearning.application.service.SysGradeService;
+import com.smlearning.infrastructure.utils.DateUtil;
 
 public class ApiService implements IApi{
   
@@ -134,7 +136,7 @@ public class ApiService implements IApi{
           resMap.put("resId",res.get("id"));
           resMap.put("resName",res.get("name"));
           resMap.put("resUrl",res.get("url"));
-          resMap.put("resCreateTime",res.get("created_time"));
+          resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
           resList.add(resMap);
         }
       }
