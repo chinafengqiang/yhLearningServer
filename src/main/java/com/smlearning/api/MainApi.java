@@ -12,6 +12,7 @@ import com.smlearning.web.controller.BaseController;
 
 import java.util.HashMap;
 import java.util.List;
+
 @Controller
 @RequestMapping("/api")
 public class MainApi extends BaseController{

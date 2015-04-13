@@ -14,6 +14,7 @@
 		select * from book_chapter where PART_ID = #{PART_ID}
     </select>  
     
+    
     <select id="getBookResCategory" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from book_resource_category where IS_VALID = 1 order by LEVEL
     </select>  

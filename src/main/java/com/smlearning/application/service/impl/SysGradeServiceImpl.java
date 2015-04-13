@@ -196,6 +196,7 @@ public class SysGradeServiceImpl implements SysGradeService {
     return resMap;
   }
 
+  
   @Override
   public long getUserGradeId(int classId) {
     HashMap<String,Object> params = new HashMap<String, Object>();

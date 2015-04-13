@@ -8,6 +8,7 @@ import com.smlearning.domain.vo.Tree;
 import cn.com.iactive.db.DataGridModel;
 
 public interface SysGradeService {
+  
 	public void getGradeList();
 	
 	public List<HashMap<String,Object>> getOrgList();

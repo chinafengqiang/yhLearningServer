@@ -124,6 +124,7 @@ public class ApiService implements IApi{
     return resList;
   }
 
+  
   @Override
   public List<HashMap<String, Object>> getBookRes(int partId, int categoryId) {
     List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();

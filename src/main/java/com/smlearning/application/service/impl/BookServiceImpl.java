@@ -22,7 +22,8 @@ import com.smlearning.jdbc.TableInfo;
 
 @Service
 public class BookServiceImpl implements BookService {
-    /**
+  
+  /**
      * 上传电子书路径名称
      */
     private final static String RES_FILE_PATH = "/uploadFile/file/";
