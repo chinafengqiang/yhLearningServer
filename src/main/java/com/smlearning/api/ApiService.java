@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smlearning.application.service.BookService;
 import com.smlearning.application.service.SysGradeService;
+import com.smlearning.application.service.UserService;
+import com.smlearning.domain.entity.UserInfo;
 import com.smlearning.infrastructure.utils.DateUtil;
 
 public class ApiService implements IApi{
@@ -18,7 +21,11 @@ public class ApiService implements IApi{
   
   @Autowired
   private SysGradeService gradeService;
+  
+  @Autowired
+  private UserService userService;
 
+  
   @Override
   public List<HashMap<String, Object>> getBookCategory(int classId) {
     List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
@@ -145,6 +152,39 @@ public class ApiService implements IApi{
       e.printStackTrace();
     }
     return resList;
+  }
+
+  @Override
+  public HashMap<String, Integer> updateUserPass(int userId, String oldPass, String newPass) {
+    HashMap<String,Integer> res = new HashMap<String,Integer>();
+    try {
+      if(userId == 0 || StringUtils.isBlank(oldPass)||StringUtils.isBlank(newPass)){
+        res.put("status",404);//参数错误
+        return res;
+      }
+      
+      UserInfo user = userService.getUserInfoById(new Long(userId));
+      if(user == null || user.getId() == null || user.getId() == 0){
+        res.put("status",400);//用户不存在
+        return res;
+      }
+      
+      String pass = user.getPassword();
+      if(!oldPass.equals(pass)){
+        res.put("status",401);//旧密码错误
+        return res;
+      }
+      
+      userService.modifyUserPassword(new Long(userId), oldPass, newPass);
+      
+      res.put("status",200);
+      return res;
+    } catch (Exception e) {
+      e.printStackTrace();
+      res.put("status",500);
+      return res;
+    }
+    
   }
   
   

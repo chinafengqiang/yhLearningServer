@@ -73,4 +73,16 @@ public class MainApi extends BaseController{
       resMap.put("bookResList",resList);
       return resMap;
     }
+    
+    
+    @RequestMapping("/updateUserPass")
+    @ResponseBody
+    public HashMap<String, Integer> updateUserPass(HttpServletRequest request){
+      int userId = ParamUtils.getIntParameter(request, "userId",0);
+      String oldPass = ParamUtils.getParameter(request, "oldPass","");
+      String newPass = ParamUtils.getParameter(request, "newPass","");
+      HashMap<String, Integer> resMap = apiService.updateUserPass(userId, oldPass, newPass);
+      return resMap;
+    }
+    
 }
