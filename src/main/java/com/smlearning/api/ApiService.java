@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.smlearning.application.service.BookService;
 import com.smlearning.application.service.SysGradeService;
 import com.smlearning.application.service.UserService;
+import com.smlearning.application.service.VideoService;
 import com.smlearning.domain.entity.UserInfo;
 import com.smlearning.infrastructure.utils.DateUtil;
 
@@ -25,6 +26,8 @@ public class ApiService implements IApi{
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private VideoService videoService;
   
   @Override
   public List<HashMap<String, Object>> getBookCategory(int classId) {
@@ -106,10 +109,10 @@ public class ApiService implements IApi{
   }
 
   @Override
-  public List<HashMap<String, Object>> getBookResCategory(int partId,int plevel) {
+  public List<HashMap<String, Object>> getBookResCategory(int partId,int plevel,int type) {
     List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
     try {
-      List<HashMap<String, Object>> tempList = bookService.getBookResCategory();
+      List<HashMap<String, Object>> tempList = bookService.getBookResCategory(type);
       if(tempList != null){
         HashMap<String, Object> resMap = null;
         for(HashMap<String, Object> res : tempList){
@@ -145,6 +148,30 @@ public class ApiService implements IApi{
           resMap.put("resName",res.get("name"));
           resMap.put("resUrl",res.get("url"));
           resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
+          resList.add(resMap);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return resList;
+  }
+
+  
+  @Override
+  public List<HashMap<String, Object>> getVideoRes(int partId, int categoryId) {
+    List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
+    try {
+      List<HashMap<String, Object>> tempList = videoService.getVideoResByPartIdAndCategoryId(partId, categoryId);
+      if(tempList != null){
+        HashMap<String, Object> resMap = null;
+        for(HashMap<String, Object> res : tempList){
+          resMap = new HashMap<String, Object>();
+          resMap.put("resId",res.get("id"));
+          resMap.put("resName",res.get("name"));
+          resMap.put("resUrl",res.get("url"));
+          resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
+          resMap.put("resLectuer",res.get("lectuer"));
           resList.add(resMap);
         }
       }

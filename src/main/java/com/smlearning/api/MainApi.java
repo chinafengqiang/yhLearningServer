@@ -57,7 +57,8 @@ public class MainApi extends BaseController{
     public HashMap<String, Object> getBookResCategory(HttpServletRequest request){
       int partId = ParamUtils.getIntParameter(request, "partId",0);
       int plevel =  ParamUtils.getIntParameter(request, "plevel",-1);
-      List<HashMap<String, Object>> resList = apiService.getBookResCategory(partId,plevel);
+      int type = ParamUtils.getIntParameter(request, "type",0);
+      List<HashMap<String, Object>> resList = apiService.getBookResCategory(partId,plevel,type);
       HashMap<String,Object> resMap = new HashMap<String, Object>();
       resMap.put("bookChapterList",resList);
       return resMap;
@@ -82,6 +83,17 @@ public class MainApi extends BaseController{
       String oldPass = ParamUtils.getParameter(request, "oldPass","");
       String newPass = ParamUtils.getParameter(request, "newPass","");
       HashMap<String, Integer> resMap = apiService.updateUserPass(userId, oldPass, newPass);
+      return resMap;
+    }
+    
+    @RequestMapping("/getVideoRes")
+    @ResponseBody
+    public HashMap<String, Object> getVideoRes(HttpServletRequest request){
+      int partId = ParamUtils.getIntParameter(request, "partId",0);
+      int categoryId =  ParamUtils.getIntParameter(request, "categoryId",0);
+      List<HashMap<String, Object>> resList = apiService.getVideoRes(partId, categoryId);
+      HashMap<String,Object> resMap = new HashMap<String, Object>();
+      resMap.put("videoResList",resList);
       return resMap;
     }
     

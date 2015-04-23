@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VideoMapper">
+ <select id="getVideoResList" resultType="java.util.HashMap">
+  	select  a.id, a.status,  a.name, a.url, a.created_time as strCreateTime,a.lectuer
+    from  course a
+    where a.grade_id=#{part_id} and a.courseware_category_id = #{courseware_category_id}
+    <if test="name != null  and  name !='' " >
+    		and a.name  LIKE CONCAT(CONCAT('%', #{name}),'%')
+    </if>
+    <if test="startTime != null  and  startTime !=''" >
+    		and a.created_time > #{startTime} 
+    </if>
+        <if test="endTime != null  and  endTime !=''" >
+    <![CDATA[	and a.created_time < #{endTime} ]]>
+    </if>
+
+    <if test="status != null" >
+    		and a.status = #{status}
+    </if>
+    <if test="sort != null" >
+      order by ${sort} ${order}
+    </if>
+  </select>
+  
+    <select id="getVideoResById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from course where id = #{id}
+   </select>
+   
+    <select id="getVideoResByPartIdAndCategoryId" resultType="java.util.HashMap">
+  	select id,name,url,created_time,lectuer
+    from  course
+    where grade_id=#{partId} and courseware_category_id = #{categoryId} order by id desc
+   </select>
+  </mapper>

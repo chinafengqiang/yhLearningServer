@@ -21,4 +21,6 @@ public interface TableInfo {
   String BOOK_CHAPTER = "book_chapter";
   
   String BOOK_RESOURCE = "courseware";
+  
+  String VIDEO_RESOURCE = "course";
 }

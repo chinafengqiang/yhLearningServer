@@ -28,6 +28,8 @@ public interface BookService {
   
   public List<HashMap<String,Object>> getBookResCategory();
   
+  public List<HashMap<String,Object>> getBookResCategory(int type);
+  
   public HashMap<String,Object> getBookchapterById(int id);
   
   public void updateBookchapter(HashMap<String,String> bookchapter);

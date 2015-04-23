@@ -184,6 +184,12 @@ public class BookServiceImpl implements BookService {
     }
 
 
+    @Override
+    public List<HashMap<String, Object>> getBookResCategory(int type) {
+      HashMap<String,Object> params = new HashMap<String,Object>();
+      params.put("TYPE",type);
+      return iacDB.getList("getBookResCategoryByType",params);
+    }
 
     @Override
     public HashMap<String, Object> getBookchapterById(int id) {

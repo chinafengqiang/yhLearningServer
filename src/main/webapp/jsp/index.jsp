@@ -32,19 +32,20 @@
              {
                  "menuid": "2", "icon": "icon-sys", "menuname": "课程管理",
                  "menus": [
-						 { "menuid": "21", "menuname": "课件分类管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/coursewareController/createCoursewareList.html" },
-                         { "menuid": "22", "menuname": "课件管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecourse.html" },
+                           
 						 { "menuid": "23", "menuname": "课程教学计划", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageLesson.html" },
 						 { "menuid": "24", "menuname": "课程进度管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecourseplan.html" },
 						 { "menuid": "25", "menuname": "课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecoursetable.html" },
-						 { "menuid": "26", "menuname": "课堂板书管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageClassBook.html" }
-                 ]
+                 		
+						 
+						 
+						 ]
              },
              {
                  "menuid": "3", "icon": "icon-sys", "menuname": "资源管理",
                  "menus": [
                            
-{ "menuid": "31", "menuname": "教学资料管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/bookController/managerBook.html" }
+{ "menuid": "31", "menuname": "教学资源管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/bookController/managerBook.html" }
                           /*{ "menuid": "31", "menuname": "电子书分类管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/coursewareController/createBookNodeList.html" },
 						 { "menuid": "32", "menuname": "电子书资料", "icon": "icon-search", "url":"${pageContext.request.contextPath}/coursewareController/manageEbooks.html" },
 						 { "menuid": "33", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }*/

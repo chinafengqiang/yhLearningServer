@@ -86,7 +86,13 @@
 			courseware_category_id : id,
 			class_id : pid
 		};
-		getData(queryData);
+		
+		if(id >= 100){
+			getVideoData(queryData);
+		}else{
+			getData(queryData);	
+		}
+		
 	}
 
 	//添加
@@ -179,6 +185,108 @@
 						});
 	}
 
+	
+	function getVideoData(queryData){
+		var url = '${pageContext.request.contextPath}/videoController/getVideoResList.html';
+		dataGrid = $('#dataGrid')
+				.datagrid(
+						{
+							url : url,
+							fitColumns : true,
+							border : false,
+							pagination : true,
+							idField : 'id',
+							pageSize : 10,
+							pageList : [ 10, 20, 30, 40, 50 ],
+							remoteSort : true, //服务器端排序
+							sortName : 'id',
+							queryParams : queryData, //查询条件
+							loadMsg : '数据装载中......',
+							sortOrder : 'desc',
+							checkOnSelect : false,
+							selectOnCheck : false,
+							rownumbers : true,
+							nowrap : false,
+							frozenColumns : [ [ {
+								field : 'ck',
+								checkbox : true
+							}, {
+								field : 'id',
+								title : '编号',
+								width : 100,
+								hidden : true
+							}, {
+								field : 'name',
+								title : '名称',
+								width : 150,
+								sortable : true
+							} ] ],
+							columns : [ [
+									{
+										field : 'url',
+										title : 'url',
+										width : 250,
+										sortable : true
+									},
+									{
+										field : 'strCreateTime',
+										title : '创建时间',
+										width : 110
+									},
+									{
+										field : 'lectuer',
+										title : '主讲人',
+										width : 80
+									},
+									{
+										field : 'status',
+										title : '状态',
+										width : 50,
+										formatter : function(value, row, index) {
+											if (value == 1) {
+												return "已推送";
+											} else {
+												return "待推送";
+											}
+										}
+									},
+									{
+										field : 'action',
+										title : '操作',
+										width : 80,
+										formatter : function(value, row, index) {
+											var e = '<a href="#" mce_href="#" onclick="editRes(\''
+													+ row.id + '\')">编辑</a> ';
+											var r = '<a href="#" mce_href="#" onclick="deleteRes(\''+ row.id+ '\')">删除</a> ';
+											var t = '<a href="#" mce_href="#" onclick="sendFun(\''
+													+ row.id + '\')">推送</a> ';
+											return e + r + t;
+										}
+									} ] ],
+							toolbar : '#toolbar',
+							onLoadSuccess : function() {
+								$('#searchForm table').show();
+								//		parent.$.messager.progress('close');
+
+								//		$(this).datagrid('tooltip');
+							},
+							onBeforeLoad:function(){
+								$('#dataGrid').datagrid('loadData',{total:0,rows:[]});
+							},
+							onRowContextMenu : function(e, rowIndex, rowData) {
+								e.preventDefault();
+								$(this).datagrid('unselectAll').datagrid(
+										'uncheckAll');
+								$(this).datagrid('selectRow', rowIndex);
+								$('#menu').menu('show', {
+									left : e.pageX,
+									top : e.pageY
+								});
+							}
+
+						});
+	}
+	
 	function getData(queryData) {
 		var url = '${pageContext.request.contextPath}/bookController/getBookResList.html';
 		dataGrid = $('#dataGrid')
@@ -258,6 +366,9 @@
 
 								//		$(this).datagrid('tooltip');
 							},
+							onBeforeLoad:function(){
+								$('#dataGrid').datagrid('loadData',{total:0,rows:[]});
+							},
 							onRowContextMenu : function(e, rowIndex, rowData) {
 								e.preventDefault();
 								$(this).datagrid('unselectAll').datagrid(
@@ -277,13 +388,20 @@
 			alert("请选择相应分类进行添加");
 			return;
 		}
+		var url = '${pageContext.request.contextPath}/bookController/addBookRes.html?ctgId='
+			+ gctgId + "&partId=" + gpartId;
+		var title = '电子书资料';
+		if(gctgId >= 100){
+			title = '视频资料';
+			url = '${pageContext.request.contextPath}/videoController/addVideoRes.html?ctgId='
+				+ gctgId + "&partId=" + gpartId;
+		}
 		parent.$
 				.modalDialog({
-					title : '电子书资料',
+					title : title,
 					width : 500,
 					height : 400,
-					href : '${pageContext.request.contextPath}/bookController/addBookRes.html?ctgId='
-							+ gctgId + "&partId=" + gpartId,
+					href : url,
 					buttons : [ {
 						text : '添加',
 						handler : function() {
@@ -297,19 +415,29 @@
 
 	//编辑
 	function editRes(id) {
-		if (id == undefined) {
+		
+		var title = '编辑电子书资料';
+		var url = '${pageContext.request.contextPath}/bookController/editBookRes.html?id='
+		+ id;
+		if(gctgId >= 100){
+			title = '编辑视频资料';
+			url = '${pageContext.request.contextPath}/videoController/editVideoRes.html?id='
+					+ id;
+		}
+		
+		/*if (id == undefined) {
 			var rows = dataGrid.datagrid('getSelections');
 			id = rows[0].id;
 		} else {
 			dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-		}
+		}*/
+		
 		parent.$
 				.modalDialog({
-					title : '编辑电子书资料',
+					title : title,
 					width : 500,
 					height : 400,
-					href : '${pageContext.request.contextPath}/bookController/editBookRes.html?id='
-							+ id,
+					href : url,
 					buttons : [ {
 						text : '编辑',
 						handler : function() {
@@ -323,6 +451,11 @@
 
 	//删除
 	function deleteRes(id) {
+		var url = '${pageContext.request.contextPath}/bookController/deleteBookRes.html';
+		if(gctgId >= 100){
+			url = '${pageContext.request.contextPath}/videoController/deleteVideoRes.html';
+		}
+		
 		var ids = "";
 		if(id > 0){
 			ids = id;
@@ -331,6 +464,11 @@
 			$.each(rows, function(i, item) {
 				ids += item.id+",";
 			});
+		}
+		
+		if(ids.length <= 0){
+			alert("请选择要删除的资源");
+			return false;
 		}
 
 		parent.$.messager
@@ -345,7 +483,7 @@
 								});
 								$
 										.post(
-												'${pageContext.request.contextPath}/bookController/deleteBookRes.html',
+												url,
 												{
 													ids : ids
 												},
@@ -355,7 +493,12 @@
 																.alert('提示',
 																		"操作成功",
 																		'info');
-														getData();
+														if(gctgId >= 100){
+															getVideoData();
+														}else{
+															getData();
+														}
+														
 													} else {
 														parent.$.messager
 																.alert('错误',
@@ -387,7 +530,11 @@
 			courseware_category_id : gctgId,
 			class_id : gpartId
 		};
-		getData(queryData);
+		if(gctgId >= 100){
+			getVideoData(queryData);
+		}else{
+			getData(queryData);
+		}
 	}
 	
 	//下发

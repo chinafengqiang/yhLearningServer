@@ -19,6 +19,10 @@
 		select * from book_resource_category where IS_VALID = 1 order by LEVEL
     </select>  
     
+    <select id="getBookResCategoryByType" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_resource_category where IS_VALID = 1 and TYPE = #{TYPE} order by LEVEL
+    </select>  
+    
     <select id="getBookchapterById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from book_chapter where ID = #{ID}
     </select>  
