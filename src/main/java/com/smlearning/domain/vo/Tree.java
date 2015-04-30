@@ -13,7 +13,7 @@ public class Tree implements java.io.Serializable,Comparable<Tree>{
     private static final long serialVersionUID = -8643403005281289794L;
     private String id;
 	private String text;
-	private String state = "open";// open,closed
+	private String state = "closed";// open,closed
 	private boolean checked = false;
 	private Object attributes;
 	private List<Tree> children;

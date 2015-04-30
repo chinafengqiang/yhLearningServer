@@ -91,6 +91,7 @@ public class BookServiceImpl implements BookService {
       HashMap<String,Tree> treeMap = initChapterTree(partId);
       List<Tree> resList = new ArrayList<Tree>();
       Tree rootTree = new Tree("0",rootName);
+      rootTree.setState("open");
       HashMap<String,String> attMap = new HashMap<String,String>();
       attMap.put("isAddRes", "0");
       rootTree.setAttributes(attMap);
@@ -156,10 +157,13 @@ public class BookServiceImpl implements BookService {
                    tempAttMap.put("isAddRes", "2");
                    tempAttMap.put("pid",tree.getId());
                    temp.setAttributes(tempAttMap);
+                   temp.setState("open");
                    childList.add(temp);
                  }
                  tree.setChildren(childList);
                }
+             }else{
+               tree.setState("open");
              }
              treeMap.put(id+"",tree);
           }

@@ -593,7 +593,7 @@
 </script>
 </head>
 <body class="easyui-layout">
-	<div region="west" title="目录管理" style="width: 200px;" id="west">
+	<div data-options="region:'west',title:'目录管理',split:true,border:false" style="width:200px;" title="目录管理">
 
 		<div style="text-align: center; padding-top: 10px;">
 			<button onclick="addFun();">添加</button>
@@ -603,7 +603,7 @@
 			<button onclick="deleteFun();">删除</button>
 		</div>
 
-		<div id="nav" class="easyui-accordion" fit="true" border="false">
+		<div id="nav"  class="easyui-accordion">
 			<ul id="tree" style="padding-top: 10px;"></ul>
 		</div>
 	</div>

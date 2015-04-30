@@ -87,6 +87,7 @@ public class SysGradeServiceImpl implements SysGradeService {
           long orgId = (Long)org.get("id");
           String orgName = (String)org.get("name");
           Tree rootTree = new Tree("0",orgName);
+          rootTree.setState("open");
           resList.add(rootTree);
           List<HashMap<String, Object>> gradeList = getGradeList(orgId);
           if(gradeList!=null){
@@ -97,6 +98,7 @@ public class SysGradeServiceImpl implements SysGradeService {
                 Object id = grade.get("id");
                 String name = (String)grade.get("name");
                 tree = new Tree(id.toString(),name);
+                tree.setState("open");
                 treeList.add(tree);
               }
             }
@@ -128,6 +130,7 @@ public class SysGradeServiceImpl implements SysGradeService {
           long orgId = (Long)org.get("id");
           String orgName = (String)org.get("name");
           Tree rootTree = new Tree("0",orgName);
+          rootTree.setState("open");
           resList.add(rootTree);
           List<HashMap<String, Object>> gradeList = getGradeList(orgId);
           if(gradeList!=null){
@@ -139,6 +142,7 @@ public class SysGradeServiceImpl implements SysGradeService {
                 Object id = grade.get("id");
                 String name = (String)grade.get("name");
                 tree = new Tree(id.toString(),name);
+                tree.setState("open");
                 List<Tree> childList = treeMap.get(id.toString());
                 if(childList != null && childList.size() > 0){
                   tree.setChildren(childList);
@@ -183,6 +187,7 @@ public class SysGradeServiceImpl implements SysGradeService {
         tree.setText(map.get("name").toString());
         String pid = map.get("grade_id").toString();
         tree.setPid(pid);
+        tree.setState("open");
         List<Tree> treeList = resMap.get(pid);
         if(treeList != null && treeList.size() > 0){
           treeList.add(tree);
