@@ -368,14 +368,21 @@ public class BookController extends BaseController{
     if (bookresList != null) {
       for (int i = 0; i < bookresList.size(); i++) {
         HashMap<String,Object> bookres = bookresList.get(i);
+        
+        long chapterId = (Long)bookres.get("class_id");
+        StringBuilder chapterSql = bookService.getFileSql(chapterId, null);
+        insertContent.append(chapterSql);
+        
         insertContent
             .append(" insert into courseware (name, courseware_category_id, url, created_time, creator, pic,grade_id,ispublic,class_id)");
-        insertContent.append(" values ('" + bookres.get("name") + "', "
+        insertContent.append(" SELECT '" + bookres.get("name") + "', "
             + bookres.get("courseware_category_id") + ", ");
         insertContent.append("'" + bookres.get("url") + "', '"
             + DateUtil.dateToString((Date)bookres.get("created_time"), false) + "',");
         insertContent.append("" + bookres.get("creator") + ", '',"
-            + bookres.get("grade_id") + "," + bookres.get("ispublic") + ","+bookres.get("class_id")+");");
+            + bookres.get("grade_id") + "," + bookres.get("ispublic") + ","+bookres.get("class_id"));
+        insertContent.append(" FROM DUAL");
+        insertContent.append(" WHERE NOT EXISTS(SELECT url FROM courseware WHERE url = '"+ bookres.get("url")+"');");
         if (i == bookresList.size() - 1) {
           insertContent.append("commit;");
         }
@@ -433,14 +440,21 @@ public class BookController extends BaseController{
         for (int i = 0; i < bookresList.size(); i++) {
           HashMap<String, Object> bookres = bookresList.get(i);
           
+          long chapterId = (Long)bookres.get("class_id");
+
+          StringBuilder chapterSql = bookService.getFileSql(chapterId, null);
+          insertContent.append(chapterSql);
+          
           insertContent
               .append(" insert into courseware (name, courseware_category_id, url, created_time, creator, pic,grade_id,ispublic,class_id)");
-          insertContent.append(" values ('" + bookres.get("name") + "', "
+          insertContent.append(" SELECT '" + bookres.get("name") + "', "
               + bookres.get("courseware_category_id") + ", ");
           insertContent.append("'" + bookres.get("url") + "', '"
               + DateUtil.dateToString((Date)bookres.get("created_time"), false) + "',");
           insertContent.append("" + bookres.get("creator") + ", '',"
-              + bookres.get("grade_id") + "," + bookres.get("ispublic") + ","+bookres.get("class_id")+");");
+              + bookres.get("grade_id") + "," + bookres.get("ispublic") + ","+bookres.get("class_id"));
+          insertContent.append(" FROM DUAL");
+          insertContent.append(" WHERE NOT EXISTS(SELECT url FROM courseware WHERE url = '"+ bookres.get("url")+"');");
           if (i == bookresList.size() - 1) {
             insertContent.append("commit;");
           }
@@ -478,5 +492,7 @@ public class BookController extends BaseController{
 
     return json;
   }
+  
+
 
 }

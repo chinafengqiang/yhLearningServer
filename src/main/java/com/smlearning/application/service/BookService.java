@@ -60,4 +60,6 @@ public interface BookService {
   
   public List<HashMap<String, Object>> getBookResByPartIdAndCategoryId(int partId,int categoryId);
   
+  public StringBuilder  getFileSql(long chapterId,StringBuilder sql);
+  
 }
