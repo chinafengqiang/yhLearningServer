@@ -62,4 +62,6 @@ public interface BookService {
   
   public StringBuilder  getFileSql(long chapterId,StringBuilder sql);
   
+  public List<HashMap<String, Object>> searchBookRes(long gradeId,String value);
+  
 }

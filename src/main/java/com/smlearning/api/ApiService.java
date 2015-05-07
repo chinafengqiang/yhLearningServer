@@ -213,6 +213,32 @@ public class ApiService implements IApi{
     }
     
   }
+
+  @Override
+  public List<HashMap<String, Object>> searchBookRes(int classId,String value) {
+    List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
+    try {
+      long gradeId = gradeService.getUserGradeId(classId);
+      if(gradeId <= 0)
+        return resList;
+      List<HashMap<String, Object>> tempList = bookService.searchBookRes(gradeId,value);
+      if(tempList != null){
+        HashMap<String, Object> resMap = null;
+        for(HashMap<String, Object> res : tempList){
+          resMap = new HashMap<String, Object>();
+          resMap.put("resId",res.get("id"));
+          resMap.put("resName",res.get("name"));
+          resMap.put("resUrl",res.get("url"));
+          resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
+          resList.add(resMap);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return resList;
+  }
+  
   
   
   

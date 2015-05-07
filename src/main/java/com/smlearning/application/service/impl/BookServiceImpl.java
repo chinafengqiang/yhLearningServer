@@ -375,6 +375,15 @@ public class BookServiceImpl implements BookService {
   }
 
 
+  @Override
+  public List<HashMap<String, Object>> searchBookRes(long gradeId,String value) {
+    HashMap<String, Object> params = new HashMap<String, Object>();
+    params.put("name", value);
+    params.put("grade_id", gradeId);
+    return iacDB.getList("searchBookRes", params);
+  }
+
+
 
   @Override
     public StringBuilder getFileSql(long chapterId,StringBuilder sql) {

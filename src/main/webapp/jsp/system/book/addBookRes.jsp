@@ -114,6 +114,7 @@
 						value="">
 						<input name="courseware_category_id" value="${ctgId}" type="hidden">
 						<input name="class_id" value="${partId}" type="hidden">
+						<input name="grade_id" value="${gradeId}" type="hidden">
 						</td>
 
 				</tr>

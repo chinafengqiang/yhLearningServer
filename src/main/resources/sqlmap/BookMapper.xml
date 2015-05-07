@@ -77,4 +77,10 @@
     from  courseware
     where class_id=#{partId} and courseware_category_id = #{categoryId} order by id desc
    </select>
+   
+   <select id="searchBookRes" resultType="java.util.HashMap">
+  	select id,name,url,created_time
+    from  courseware
+    where grade_id = #{grade_id} and name  LIKE CONCAT(CONCAT('%', #{name}),'%') order by id desc
+   </select>
 </mapper>

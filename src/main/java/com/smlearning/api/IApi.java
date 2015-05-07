@@ -17,4 +17,6 @@ public interface IApi {
     public List<HashMap<String, Object>> getVideoRes(int partId,int categoryId);
     
     public HashMap<String,Integer> updateUserPass(int userId,String oldPass,String newPass);
+    
+    public List<HashMap<String, Object>> searchBookRes(int classId,String value);
 }
