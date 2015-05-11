@@ -20,4 +20,6 @@ public interface VideoService {
   
   public List<HashMap<String, Object>> getVideoResByPartIdAndCategoryId(int partId,int categoryId);
   
+  public List<HashMap<String, Object>> searchVideoRes(long gradeId,String value);
+  
 }

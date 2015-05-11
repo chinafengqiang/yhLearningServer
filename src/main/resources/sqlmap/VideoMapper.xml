@@ -33,4 +33,10 @@
     from  course
     where grade_id=#{partId} and courseware_category_id = #{categoryId} order by id desc
    </select>
+   
+       <select id="searchVideoRes" resultType="java.util.HashMap">
+  	select id,name,url,created_time,lectuer
+    from  course
+    where ispublic = #{grade_id} and name  LIKE CONCAT(CONCAT('%', #{name}),'%') order by id desc
+   </select>
   </mapper>

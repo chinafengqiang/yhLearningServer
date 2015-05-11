@@ -110,6 +110,16 @@ public class VideoServiceImpl implements VideoService{
     params.put("categoryId",categoryId);
     return iacDB.getList("getVideoResByPartIdAndCategoryId", params);
   }
+
+  @Override
+  public List<HashMap<String, Object>> searchVideoRes(long gradeId, String value) {
+    HashMap<String, Object> params = new HashMap<String, Object>();
+    params.put("name", value);
+    params.put("grade_id", gradeId);
+    return iacDB.getList("searchVideoRes", params);
+  }
+  
+  
   
   
   

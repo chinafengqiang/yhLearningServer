@@ -113,4 +113,20 @@ public class MainApi extends BaseController{
       return resMap;
     }
     
+    @RequestMapping("/searchVideoRes")
+    @ResponseBody
+    public HashMap<String, Object> searchVideoRes(HttpServletRequest request){
+      String value = ParamUtils.getParameter(request,"value","");
+      int classId = ParamUtils.getIntParameter(request, "classId",0);
+      try {
+        value = java.net.URLDecoder.decode(value,"utf-8");
+      } catch (Exception e) {
+        // TODO: handle exception
+      }
+      List<HashMap<String, Object>> resList = apiService.searchVideoRes(classId,value);
+      HashMap<String,Object> resMap = new HashMap<String, Object>();
+      resMap.put("videoResList",resList);
+      return resMap;
+    }
+    
 }

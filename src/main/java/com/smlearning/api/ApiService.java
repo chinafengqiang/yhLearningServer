@@ -230,6 +230,7 @@ public class ApiService implements IApi{
           resMap.put("resName",res.get("name"));
           resMap.put("resUrl",res.get("url"));
           resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
+          resMap.put("categoryId",res.get("courseware_category_id"));
           resList.add(resMap);
         }
       }
@@ -238,6 +239,34 @@ public class ApiService implements IApi{
     }
     return resList;
   }
+
+  @Override
+  public List<HashMap<String, Object>> searchVideoRes(int classId, String value) {
+    List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
+    try {
+      long gradeId = gradeService.getUserGradeId(classId);
+      if(gradeId <= 0)
+        return resList;
+      List<HashMap<String, Object>> tempList = videoService.searchVideoRes(gradeId,value);
+      if(tempList != null){
+        HashMap<String, Object> resMap = null;
+        for(HashMap<String, Object> res : tempList){
+          resMap = new HashMap<String, Object>();
+          resMap.put("resId",res.get("id"));
+          resMap.put("resName",res.get("name"));
+          resMap.put("resUrl",res.get("url"));
+          resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
+          resMap.put("resLectuer",res.get("lectuer"));
+          resList.add(resMap);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return resList;
+  }
+  
+  
   
   
   
