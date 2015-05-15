@@ -422,4 +422,20 @@ public class BookServiceImpl implements BookService {
 
 
 
+  @Override
+  public int getResGradeId(int chatpterId) {
+    HashMap<String,Object> params = new HashMap<String,Object>();
+    params.put("chapterId",chatpterId);
+    List<HashMap<String,Object>> list = iacDB.getList("getResGradeId",params);
+    if(list != null && list.size() > 0){
+      HashMap<String,Object> map = list.get(0);
+      if(map != null){
+        return (Integer)map.get("GRADE_ID");
+      }
+    }
+    return 0;
+  }
+
+
+
 }

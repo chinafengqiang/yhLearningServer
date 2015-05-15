@@ -115,6 +115,7 @@
 						value="">
 						<input name="courseware_category_id" value="${ctgId}" type="hidden">
 						<input name="grade_id" value="${partId}" type="hidden">
+						<input name="ispublic" value="${gradeId}" type="hidden">
 						</td>
 
 				</tr>

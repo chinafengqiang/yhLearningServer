@@ -51,7 +51,7 @@
 						 { "menuid": "33", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }*/
                           
                  ]
-             },         
+             },
              {
                  "menuid": "4", "icon": "icon-sys", "menuname": "同步管理",
                  "menus": [
@@ -60,6 +60,14 @@
 						 { "menuid": "43", "menuname": "同步用户管理", "icon": "icon-search", "url":"${pageContext.request.contextPath}/dataSyncController/user.html" },
 						 { "menuid": "44", "menuname": "查看文件投递", "icon": "icon-search", "url":"${pageContext.request.contextPath}/dataSyncController/listFileporg.html" },
 						 { "menuid": "45", "menuname": "已完成投递文件", "icon": "icon-search", "url":"${pageContext.request.contextPath}/dataSyncController/listFileporged.html" }
+                 ]
+             },
+             
+             {
+                 "menuid": "5", "icon": "icon-sys", "menuname": "在线交流管理",
+                 "menus": [
+						 { "menuid": "51", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }
+                          
                  ]
              },
             ]

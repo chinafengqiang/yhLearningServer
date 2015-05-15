@@ -218,11 +218,13 @@ public class BookController extends BaseController{
     ModelAndView mv = new ModelAndView("jsp/system/book/addBookRes");
     int ctgId = ParamUtils.getIntParameter(request, "ctgId",0);
     int partId = ParamUtils.getIntParameter(request, "partId",0);
-    HashMap<String,Object> part = bookService.getBookpartById(partId);
-    int gradeId = 0;
-    if(part != null){
-      gradeId = (Integer)part.get("GRADE_ID");
-    }
+    
+//    HashMap<String,Object> part = bookService.getBookpartById(partId);
+//    int gradeId = 0;
+//    if(part != null){
+//      gradeId = (Integer)part.get("GRADE_ID");
+//    }
+    int gradeId = bookService.getResGradeId(partId);
     mv.addObject("ctgId", ctgId);
     mv.addObject("partId", partId);
     mv.addObject("gradeId",gradeId);

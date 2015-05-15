@@ -36,6 +36,8 @@ public class VideoController {
     
     @Autowired
     private VideoService videoService;
+    @Autowired
+    private BookService bookService;
     
     @RequestMapping("/managerVideo")
     public String managerVideo() {
@@ -65,8 +67,10 @@ public class VideoController {
       ModelAndView mv = new ModelAndView("jsp/system/video/addVideoRes");
       int ctgId = ParamUtils.getIntParameter(request, "ctgId",0);
       int partId = ParamUtils.getIntParameter(request, "partId",0);
+      int gradeId = bookService.getResGradeId(partId);
       mv.addObject("ctgId", ctgId);
       mv.addObject("partId", partId);
+      mv.addObject("gradeId",gradeId);
       return mv;
     }
     

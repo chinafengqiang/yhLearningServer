@@ -83,4 +83,9 @@
     from  courseware
     where grade_id = #{grade_id} and name  LIKE CONCAT(CONCAT('%', #{name}),'%') order by id desc
    </select>
+   
+   <select id="getResGradeId" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select bp.GRADE_ID from book_chapter bc inner join book_part bp on bc.PART_ID = bp.ID where bc.ID= #{chapterId}
+   </select>  
+   
 </mapper>
