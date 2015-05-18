@@ -79,7 +79,7 @@
    </select>
    
    <select id="searchBookRes" resultType="java.util.HashMap">
-  	select id,name,url,created_time,courseware_category_id
+  	select id,name,url,created_time,courseware_category_id,alls_path
     from  courseware
     where grade_id = #{grade_id} and name  LIKE CONCAT(CONCAT('%', #{name}),'%') order by id desc
    </select>
@@ -87,5 +87,16 @@
    <select id="getResGradeId" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select bp.GRADE_ID from book_chapter bc inner join book_part bp on bc.PART_ID = bp.ID where bc.ID= #{chapterId}
    </select>  
+   
+   
+    <select id="getBookpartAndCategoryById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select p.*,c.name as categoryName from book_part p inner join courseware_category c on c.id = p.CATEGORY_ID where p.ID = #{Id}
+    </select>
+    
+   <select id="getCategoryTypeById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from book_resource_category where ID= #{ID}
+   </select>  
+    
+    
    
 </mapper>

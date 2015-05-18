@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import cn.com.iactive.db.DataGridModel;
 import cn.com.iactive.db.IACDB;
 
+import com.smlearning.application.service.BookService;
 import com.smlearning.application.service.VideoService;
 import com.smlearning.jdbc.TableInfo;
 
@@ -24,6 +25,9 @@ public class VideoServiceImpl implements VideoService{
 
   @Autowired
   private IACDB<HashMap<String, Object>> iacDB;
+  
+  @Autowired
+  private BookService bookService;
   
   @Override
   public List<HashMap<String, Object>> getVideopart(int gradeId, int categroyId) {
@@ -69,6 +73,47 @@ public class VideoServiceImpl implements VideoService{
   @Override
   public long createVideoRes(HashMap<String, String> videores) {
     videores.put("url",fileName+videores.get("url"));
+    
+    StringBuilder allIds = new StringBuilder();
+    StringBuilder allNames = new StringBuilder();
+    bookService.getResAllsPath(Long.parseLong(videores.get("grade_id")),allIds,allNames);
+    if(StringUtils.isNotBlank(allIds.toString())){
+      String[] idArr = allIds.toString().split(";");
+      String[] nameArr = allNames.toString().split(";");
+      
+      String[] chapterIdArr = idArr[1].split(",");
+      String[] chapterNameArr = nameArr[1].split(",");
+      String chapters = idArr[0];
+      String chapterNs = nameArr[0];
+      if(chapterIdArr != null){
+        for(int i=chapterIdArr.length-1;i>=0;i--){
+          String id = chapterIdArr[i];
+          if(StringUtils.isNotBlank(id)){
+            chapters+=","+id;
+          }
+        }
+      }
+
+      if(chapterNameArr != null){
+        for(int i=chapterNameArr.length-1;i>=0;i--){
+          String name = chapterNameArr[i];
+          if(StringUtils.isNotBlank(name)){
+            chapterNs+=","+name;
+          }
+        }
+      }
+      
+      String categoryId = videores.get("courseware_category_id");
+      chapters += ","+categoryId;
+      
+      HashMap<String, Object> cate = bookService.getResCategoryType(Integer.parseInt(categoryId));
+      String catName = "";
+      if(cate != null){
+        catName = (String)cate.get("NAME");
+      }
+      chapterNs += ","+catName;
+      videores.put("alls_path",chapters+";"+chapterNs);
+    } 
     return iacDB.insertDynamicRInt(TableInfo.VIDEO_RESOURCE, videores);
   }
 
@@ -120,8 +165,10 @@ public class VideoServiceImpl implements VideoService{
   }
   
   
-  
-  
-  
-  
+ 
+
 }
+  
+  
+  
+  

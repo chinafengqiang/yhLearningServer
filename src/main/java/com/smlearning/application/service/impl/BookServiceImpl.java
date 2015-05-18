@@ -225,6 +225,46 @@ public class BookServiceImpl implements BookService {
   @Override
   public long createBookRes(HashMap<String, String> bookres) {
     bookres.put("url", RES_FILE_PATH + bookres.get("url"));
+    StringBuilder allIds = new StringBuilder();
+    StringBuilder allNames = new StringBuilder();
+    getResAllsPath(Long.parseLong(bookres.get("class_id")),allIds,allNames);
+    if(StringUtils.isNotBlank(allIds.toString())){
+      String[] idArr = allIds.toString().split(";");
+      String[] nameArr = allNames.toString().split(";");
+      
+      String[] chapterIdArr = idArr[1].split(",");
+      String[] chapterNameArr = nameArr[1].split(",");
+      String chapters = idArr[0];
+      String chapterNs = nameArr[0];
+      if(chapterIdArr != null){
+        for(int i=chapterIdArr.length-1;i>=0;i--){
+          String id = chapterIdArr[i];
+          if(StringUtils.isNotBlank(id)){
+            chapters+=","+id;
+          }
+        }
+      }
+
+      if(chapterNameArr != null){
+        for(int i=chapterNameArr.length-1;i>=0;i--){
+          String name = chapterNameArr[i];
+          if(StringUtils.isNotBlank(name)){
+            chapterNs+=","+name;
+          }
+        }
+      }
+      
+      String categoryId = bookres.get("courseware_category_id");
+      chapters += ","+categoryId;
+      
+      HashMap<String, Object> cate = this.getResCategoryType(Integer.parseInt(categoryId));
+      String catName = "";
+      if(cate != null){
+        catName = (String)cate.get("NAME");
+      }
+      chapterNs += ","+catName;
+      bookres.put("alls_path",chapters+";"+chapterNs);
+    }
     return iacDB.insertDynamicRInt(TableInfo.BOOK_RESOURCE, bookres);
   }
 
@@ -435,7 +475,55 @@ public class BookServiceImpl implements BookService {
     }
     return 0;
   }
+  
+  public void getResAllsPath(long chapterId,StringBuilder allIds,StringBuilder allNames){
+    HashMap<String,Object> chapter = this.getBookchapterById((int)chapterId);
 
-
+    if(chapter != null){
+      int ID = (Integer)chapter.get("ID");
+      String NAME = (String)chapter.get("NAME");
+      int PID = (Integer)chapter.get("PID");
+      int PART_ID = (Integer)chapter.get("PART_ID");
+      
+      if(allIds == null||allIds.length() == 0){
+        //allIds = new StringBuilder();
+       // allNames = new StringBuilder();
+        HashMap<String,Object> part = getBookpartAndCategoryById(PART_ID);
+        if(part != null){
+          long pID = (Long)part.get("ID");
+          String pNAME = (String)part.get("NAME");
+          int pCATEGORY_ID = (Integer)part.get("CATEGORY_ID");
+          String cName = (String)part.get("categoryName");
+          allIds.append(pCATEGORY_ID+","+pID+";");
+          allNames.append(cName+","+pNAME+";");
+        }
+      }
+      allIds.append(ID+",");
+      allNames.append(NAME+",");
+      
+      if(PID != 0){
+        getResAllsPath(PID,allIds,allNames);
+      }
+  }
 
 }
+
+  @Override
+  public HashMap<String, Object> getBookpartAndCategoryById(int id) {
+    HashMap<String, Object> res = iacDB.get("getBookpartAndCategoryById", id);
+    return res;
+  }
+
+
+
+  @Override
+  public HashMap<String, Object> getResCategoryType(int id) {
+    HashMap<String, Object> res = iacDB.get("getCategoryTypeById", id);
+    return res;
+  }
+  
+  
+  
+}
+
+

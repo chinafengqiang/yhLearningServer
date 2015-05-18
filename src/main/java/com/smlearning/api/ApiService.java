@@ -231,6 +231,12 @@ public class ApiService implements IApi{
           resMap.put("resUrl",res.get("url"));
           resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
           resMap.put("categoryId",res.get("courseware_category_id"));
+          String allPath = (String)res.get("alls_path");
+          if(StringUtils.isNotBlank(allPath)){
+            String[] allArr = allPath.split(";");
+            resMap.put("allIds",allArr[0]);
+            resMap.put("allNames",allArr[1]);
+          }
           resList.add(resMap);
         }
       }
@@ -257,6 +263,12 @@ public class ApiService implements IApi{
           resMap.put("resUrl",res.get("url"));
           resMap.put("resCreateTime",DateUtil.dateToString((Date)res.get("created_time"), false));
           resMap.put("resLectuer",res.get("lectuer"));
+          String allPath = (String)res.get("alls_path");
+          if(StringUtils.isNotBlank(allPath)){
+            String[] allArr = allPath.split(";");
+            resMap.put("allIds",allArr[0]);
+            resMap.put("allNames",allArr[1]);
+          }
           resList.add(resMap);
         }
       }

@@ -35,7 +35,7 @@
    </select>
    
        <select id="searchVideoRes" resultType="java.util.HashMap">
-  	select id,name,url,created_time,lectuer
+  	select id,name,url,created_time,lectuer,alls_path
     from  course
     where ispublic = #{grade_id} and name  LIKE CONCAT(CONCAT('%', #{name}),'%') order by id desc
    </select>

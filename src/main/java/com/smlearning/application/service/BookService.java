@@ -65,4 +65,10 @@ public interface BookService {
   public List<HashMap<String, Object>> searchBookRes(long gradeId,String value);
 
   public int getResGradeId(int chatpterId);
+  
+  public HashMap<String,Object> getBookpartAndCategoryById(int id);
+  
+  public HashMap<String,Object> getResCategoryType(int id);
+  
+  public void getResAllsPath(long chapterId,StringBuilder allIds,StringBuilder allNames);
 }
