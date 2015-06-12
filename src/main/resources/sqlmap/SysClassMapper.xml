@@ -285,4 +285,9 @@
    	<select id="getAllClass" resultType="java.util.HashMap">        
 		select * from sys_class order by id
 	</select>
+	
+   	<select id="getClassTearch" resultType="java.util.HashMap" parameterType="java.util.HashMap">        
+		select m.*,c.name as category from manager m inner join courseware_category c on m.post = c.id where degree = 1 and instr(department,#{classId}) order by id
+	</select>
+   	
 </mapper>

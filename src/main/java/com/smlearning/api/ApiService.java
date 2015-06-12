@@ -277,6 +277,28 @@ public class ApiService implements IApi{
     }
     return resList;
   }
+
+  @Override
+  public List<HashMap<String, Object>> getClassTearch(int classId) {
+    List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
+    try {
+      List<HashMap<String,Object>> tList = userService.getClassTearch(classId);
+      HashMap<String, Object> tearch;
+      if(tList != null){
+        for(HashMap<String, Object> t : tList){
+          tearch = new HashMap<String,Object>();
+          tearch.put("id",t.get("id"));
+          tearch.put("name",t.get("name"));
+          tearch.put("truename",t.get("actual_name"));
+          tearch.put("category",t.get("category"));
+          resList.add(tearch);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return resList;
+  }
   
   
   

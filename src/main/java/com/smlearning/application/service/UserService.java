@@ -1,5 +1,6 @@
 package com.smlearning.application.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.smlearning.domain.entity.UserInfo;
@@ -177,4 +178,6 @@ public interface UserService {
 	public void removeUsers(long[] ids);
 	
 	public void setUserPass(long[] ids);
+	
+	public List<HashMap<String,Object>> getClassTearch(int classId);
 }

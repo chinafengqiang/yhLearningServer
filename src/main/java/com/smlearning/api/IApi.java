@@ -21,4 +21,6 @@ public interface IApi {
     public List<HashMap<String, Object>> searchBookRes(int classId,String value);
     
     public List<HashMap<String, Object>> searchVideoRes(int classId,String value);
+    
+    public List<HashMap<String, Object>> getClassTearch(int classId);
 }

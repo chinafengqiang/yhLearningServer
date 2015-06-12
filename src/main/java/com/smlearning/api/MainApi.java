@@ -1,7 +1,12 @@
 package com.smlearning.api;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,6 +131,41 @@ public class MainApi extends BaseController{
       List<HashMap<String, Object>> resList = apiService.searchVideoRes(classId,value);
       HashMap<String,Object> resMap = new HashMap<String, Object>();
       resMap.put("videoResList",resList);
+      return resMap;
+    }
+    
+    
+    @RequestMapping("/getClassTearch")
+    @ResponseBody
+    public HashMap<String, Object> getClassTearch(HttpServletRequest request){
+      int classId = ParamUtils.getIntParameter(request, "classId",0);
+      List<HashMap<String, Object>> resList = apiService.getClassTearch(classId);
+      HashMap<String,Object> resMap = new HashMap<String, Object>();
+      resMap.put("tearchResList",resList);
+      return resMap;
+    }
+    
+    
+    private ServletFileUpload upload;
+    final long MAXSize = 4194304*2L;//4*2MB
+    String filedir=null;
+    
+    @RequestMapping("/saveMessage")
+    @ResponseBody
+    public HashMap<String, Object> saveMessage(HttpServletRequest request,HttpSession session){
+      String msgctxt = ParamUtils.getParameter(request, "msgctxt","");
+      FileItemFactory factory = new DiskFileItemFactory();// Create a factory for disk-based file items
+      this.upload = new ServletFileUpload(factory);// Create a new file upload handler
+      this.upload.setSizeMax(this.MAXSize);// Set overall request size constraint 4194304
+      filedir=session.getServletContext().getRealPath("images");
+      try {
+        List<FileItem> items = this.upload.parseRequest(request);
+        System.out.println(items);
+      } catch (Exception e) {
+        // TODO: handle exception
+      }
+      HashMap<String,Object> resMap = new HashMap<String, Object>();
+      resMap.put("res",200);
       return resMap;
     }
     

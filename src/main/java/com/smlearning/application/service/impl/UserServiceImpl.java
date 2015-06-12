@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserActivity userActivity;
+	@Autowired
 	private IACDB<HashMap<String,Object>> iacDB;
 	
 	private String getApplicationProperty(String propertyName) {
@@ -275,6 +276,16 @@ public class UserServiceImpl implements UserService{
 		}
 		//iacDB.delete("setUserPass", params);
 	}
+
+
+  @Override
+  public List<HashMap<String, Object>> getClassTearch(int classId) {
+    HashMap<String,Object> params = new HashMap<String,Object>();
+    params.put("classId",classId);
+    return iacDB.getList("getClassTearch", params);
+  }
+	
+	
 	
 	
 	
