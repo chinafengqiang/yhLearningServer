@@ -146,10 +146,10 @@ public class MainApi extends BaseController{
     }
     
     
+    
     private ServletFileUpload upload;
     final long MAXSize = 4194304*2L;//4*2MB
     String filedir=null;
-    
     @RequestMapping("/saveMessage")
     @ResponseBody
     public HashMap<String, Object> saveMessage(HttpServletRequest request,HttpSession session){
