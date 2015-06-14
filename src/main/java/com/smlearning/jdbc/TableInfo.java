@@ -23,4 +23,6 @@ public interface TableInfo {
   String BOOK_RESOURCE = "courseware";
   
   String VIDEO_RESOURCE = "course";
+  
+  String ONLINE_MSG = "online_message";
 }

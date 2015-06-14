@@ -216,6 +216,20 @@ public class SysGradeServiceImpl implements SysGradeService {
     }
     return gradeId;
   }
+
+  
+@Override
+public int getTearchCategoryByName(String categoryName) {
+	String[] names = {"数学","语文","英语","政治","历史","地理","物理","化学","生物"};
+	int[] ids = {1,2,3,14,71,72,73,74,75};
+	for(int i = 0;i<names.length;i++){
+		String name = names[i];
+		if(name.equals(categoryName)){
+			return ids[i];
+		}
+	}
+	return 0;
+}
   
   
 

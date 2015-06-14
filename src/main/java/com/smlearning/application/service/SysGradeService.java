@@ -34,4 +34,6 @@ public interface SysGradeService {
 	public List<HashMap<String,Object>> getAllClass();
 	
 	public long getUserGradeId(int classId);
+	
+	public int getTearchCategoryByName(String categoryName);
 }

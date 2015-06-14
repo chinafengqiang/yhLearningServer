@@ -23,4 +23,6 @@ public interface IApi {
     public List<HashMap<String, Object>> searchVideoRes(int classId,String value);
     
     public List<HashMap<String, Object>> getClassTearch(int classId);
+    
+    public int saveOnlineMessage(HashMap<String, Object> msg);
 }
