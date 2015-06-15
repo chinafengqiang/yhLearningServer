@@ -9,11 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smlearning.application.service.BookService;
+import com.smlearning.application.service.OnlineMsgService;
 import com.smlearning.application.service.SysGradeService;
 import com.smlearning.application.service.UserService;
 import com.smlearning.application.service.VideoService;
 import com.smlearning.domain.entity.UserInfo;
 import com.smlearning.infrastructure.utils.DateUtil;
+
 
 public class ApiService implements IApi{
   
@@ -28,6 +30,9 @@ public class ApiService implements IApi{
 
   @Autowired
   private VideoService videoService;
+  
+  @Autowired
+  private OnlineMsgService onlineMsgService;
   
   @Override
   public List<HashMap<String, Object>> getBookCategory(int classId) {
@@ -299,6 +304,22 @@ public class ApiService implements IApi{
     }
     return resList;
   }
+
+  
+  
+@Override
+public int saveOnlineMessage(HashMap<String, Object> msg) {
+    try {
+        String objectName = (String)msg.get("OBJECT_NAME");
+        int object = gradeService.getTearchCategoryByName(objectName);
+        msg.put("OBJECT",object);
+        return onlineMsgService.saveOnlineMsg(msg);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return 0;
+    }
+}
+  
   
   
   
