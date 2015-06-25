@@ -388,6 +388,7 @@ public List<HashMap<String, Object>> getOnlineReplyMessage(int msgId) {
   return resList;
 }
 
+
 @Override
 public void getLessonPlan(int lessonId, int lessonNum,int lessonWeek,
     HashMap<String, Object> resMap) {
