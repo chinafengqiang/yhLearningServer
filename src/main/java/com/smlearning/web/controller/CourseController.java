@@ -571,6 +571,7 @@ public class CourseController extends BaseController {
   public String manageTempLesson() {
     return "jsp/study/manageTempLesson";
   }
+  
 
   /**
    * 获取课程进度数据表格
