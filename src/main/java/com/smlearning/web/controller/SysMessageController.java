@@ -1,6 +1,7 @@
 package com.smlearning.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import cn.com.iactive.db.DataGridModel;
 
 import com.smlearning.application.service.OnlineForumService;
 import com.smlearning.application.service.SysKeyService;
@@ -24,6 +28,7 @@ import com.smlearning.infrastructure.utils.DataGrid;
 import com.smlearning.infrastructure.utils.DateUtil;
 import com.smlearning.infrastructure.utils.Json;
 import com.smlearning.infrastructure.utils.PageHelper;
+import com.smlearning.infrastructure.utils.ParamUtils;
 
 /**
  *公告通知控制层处理
@@ -519,5 +524,63 @@ public class SysMessageController extends BaseController{
 		return json;
 		
 	}
+	
+	   @RequestMapping("/manageOnlineMessage")
+	    public String managerOnlineMessage() {
+	        return "jsp/system/online/manageOnline";
+	    }
+	   
+	   @RequestMapping(value = "getOnlineMessageList")
+	   @ResponseBody
+	   public HashMap<String, Object> getCoursewareList(DataGridModel dm, HttpServletRequest request) {
+	     HashMap<String, String> params = ParamUtils.getFilterStringParams(request);
+	     HashMap<String, Object> resMap = onlineForumService.getOnlineMessageList(dm, params);
+	     return resMap;
+	   }
+	   
+	   @RequestMapping("/setOnlineStatus")
+	   @ResponseBody
+	   public Json setOnlineStatus(HttpServletRequest request){
+	     Json json = new Json();
+	     try {
+	       String ids = ParamUtils.getParameter(request, "ids","");
+	       int isValid = ParamUtils.getIntParameter(request, "isValid",0);
+	       onlineForumService.setOnlineStatus(ids,isValid);
+	       json.setSuccess(true);
+	     } catch (Exception e) {
+	       json.setSuccess(false);
+	       json.setMsg(e.getMessage());
+	     }
+	     return json;
+	   }
+	   
+	   @RequestMapping("/showReplyMessage")
+	   public ModelAndView showReplyMessage(HttpServletRequest request){
+	     ModelAndView mv = new ModelAndView("jsp/system/online/showReplyMessage");
+	     int id = ParamUtils.getIntParameter(request, "id",0);
+	     List<HashMap<String, Object>> resList = onlineForumService.getReplyMessage(id);
+	     mv.addObject("replyList",resList);
+	     int count = 0;
+	     if(resList != null)
+	       count = resList.size();
+	     mv.addObject("replyCount",count);
+	     return mv;
+	   }
+	   
+	   @RequestMapping("/setOnlineReplyStatus")
+       @ResponseBody
+       public Json setOnlineReplyStatus(HttpServletRequest request){
+         Json json = new Json();
+         try {
+           int id = ParamUtils.getIntParameter(request, "id",0);
+           int isValid = ParamUtils.getIntParameter(request, "isValid",0);
+           onlineForumService.setOnlineReplyStatus(id, isValid);
+           json.setSuccess(true);
+         } catch (Exception e) {
+           json.setSuccess(false);
+           json.setMsg(e.getMessage());
+         }
+         return json;
+       }
 	
 }

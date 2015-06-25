@@ -298,7 +298,29 @@ public interface CourseService {
 
   public List<HashMap<String,Object>> getLessonDetailList(int lessonId);
   
+  public List<HashMap<String,Object>> getLessonTempDetailList(int lessonId);
+  
   public void deleteLesson(long[] ids);
   
+  public void deleteLessonTemp(long[] ids);
+  
   public int getLessons(long classId, List<HashMap<String, Object>> resList);
+  
+  public void insertLessonPlan(List<HashMap<String,Object>> plans);
+  
+  public void insertLessonTempPlan(List<HashMap<String,Object>> plans);
+  
+  public void deleteLessonPlans(int lessonId);
+  
+  public void deleteLessonTempPlans(int lessonId);
+  
+  public HashMap<String,Object> getLessonPlan(int lessonId,int lessonNum,int lessWeek);
+  
+  public int addLessonTempDefine(HashMap<String, Object> lesson);
+  
+  public void addLessonTempDetail(HashMap<String, Object> detail);
+  
+  public HashMap<String, Object> getLessonTempList(DataGridModel dm, HashMap<String, String> params);
+  
+  public HashMap<String, Object> getCategoryPlanList(DataGridModel dm, HashMap<String, String> params);
 }

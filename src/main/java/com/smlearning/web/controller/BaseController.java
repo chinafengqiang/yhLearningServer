@@ -3,12 +3,16 @@ package com.smlearning.web.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.smlearning.infrastructure.utils.StringEscapeEditor;
 
@@ -44,5 +48,7 @@ public class BaseController{
 	public String redirectJsp(@PathVariable String folder, @PathVariable String jspName) {
 		return "/" + folder + "/" + jspName;
 	}
+	
+
 	
 }

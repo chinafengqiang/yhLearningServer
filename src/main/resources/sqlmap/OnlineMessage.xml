@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OnlineMessageMapper">
+	<select id="getOnlineMessage" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from online_message where CLASS_ID = ${CLASS_ID} AND OBJECT = 0  and IS_VALID = 1
+		UNION
+		select * from online_message where SRC = ${UID} and IS_VALID = 1 ORDER BY ID DESC LIMIT ${OFFSET},${PAGESIZE}
+    </select>
+    
+	<select id="getOnlineMessageCount" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		SELECT COUNT(*) AS COUNT from 
+	    (select * from online_message where CLASS_ID = ${CLASS_ID} AND OBJECT = 0 and IS_VALID = 1 
+		UNION
+		select * from online_message where SRC = ${UID} and IS_VALID = 1) AS T
+    </select>
+    
+	<select id="getOnlineReplyMessage" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from online_message_reply where MSG_ID = ${msgId} AND IS_VALID = 1
+    </select>
+	
+    <select id="getOnlineMessageList" resultType="java.util.HashMap">
+  	select  *
+    from  online_message 
+    where (1=1)
+    <if test="sender != null  and  sender !='' " >
+    		and SRC_NAME  LIKE CONCAT(CONCAT('%', #{sender}),'%')
+    </if>
+    <if test="startTime != null  and  startTime !=''" >
+    		and M_TIME > #{startTime} 
+    </if>
+        <if test="endTime != null  and  endTime !=''" >
+    <![CDATA[	and M_TIME < #{endTime} ]]>
+    </if>
+    <if test="classId != null" >
+    		and CLASS_ID = #{classId}
+    </if>
+    
+    <if test="sort != null" >
+      order by ${sort} ${order}
+    </if>
+  </select>
+  
+    <select id="getReplyMessageByMsgId" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from online_message_reply where MSG_ID = ${msgId}
+    </select>
+    
+</mapper>

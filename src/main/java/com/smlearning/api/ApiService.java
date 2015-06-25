@@ -8,7 +8,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cn.com.iactive.db.PagerModel;
+
 import com.smlearning.application.service.BookService;
+import com.smlearning.application.service.CourseService;
 import com.smlearning.application.service.OnlineMsgService;
 import com.smlearning.application.service.SysGradeService;
 import com.smlearning.application.service.UserService;
@@ -33,6 +36,9 @@ public class ApiService implements IApi{
   
   @Autowired
   private OnlineMsgService onlineMsgService;
+  
+  @Autowired
+  private CourseService courseService;
   
   @Override
   public List<HashMap<String, Object>> getBookCategory(int classId) {
@@ -319,9 +325,86 @@ public int saveOnlineMessage(HashMap<String, Object> msg) {
         return 0;
     }
 }
+
+
+
+@Override
+public int saveOnlineReplyMessage(HashMap<String, Object> msg) {
+  try {
+    onlineMsgService.saveOnlineReplyMsg(msg);
+    return 1;
+  } catch (Exception e) {
+    e.printStackTrace();
+    return 0;
+  }
+}
+
+@Override
+public void getOnlineMessage(int userId, int classId, int offset,
+    int pageSize, HashMap<String, Object> resMap) {
+  PagerModel<HashMap<String, Object>> pm = onlineMsgService.getOnlineMessage(userId, classId, offset, pageSize);
+  resMap.put("totals",pm.getTotals());
+  List<HashMap<String,Object>> items = pm.getItems();
+  List<HashMap<String,Object>> resList = new ArrayList<HashMap<String,Object>>();
+  if(items != null){
+    HashMap<String,Object> res = null;
+    for(HashMap<String,Object> msg : items){
+      res = new HashMap<String,Object>();
+      res.put("id",msg.get("ID"));
+      res.put("msg",msg.get("MESSAGE"));
+      res.put("msgtime",DateUtil.dateToString((Date)msg.get("M_TIME"),false));
+      res.put("sender",msg.get("SRC_NAME"));
+      res.put("imagePath",msg.get("IMAGE_PATH"));
+      res.put("localImagePath",msg.get("LOCAL_IMAGE_PATH"));
+      resList.add(res);
+    }
+  }
+  resMap.put("messageList",resList);
+}
+
+@Override
+public List<HashMap<String, Object>> getOnlineReplyMessage(int msgId) {
+  List<HashMap<String,Object>> resList = new ArrayList<HashMap<String,Object>>();
+  try {
+    List<HashMap<String,Object>> msgList = onlineMsgService.getOnlineReplyMessage(msgId);
+    if(msgList != null){
+      HashMap<String,Object> res = null;
+      for(HashMap<String,Object> msg : msgList){
+        res = new HashMap<String,Object>();
+        res.put("id",msg.get("ID"));
+        res.put("rpmsgId",msg.get("MSG_ID"));
+        res.put("rpmsg",msg.get("RP_MSG"));
+        res.put("rptime",DateUtil.dateToString((Date)msg.get("RP_TIME"),false));
+        res.put("rpuname",msg.get("RP_UNAME"));
+        res.put("rpuid",msg.get("RP_UID"));
+        res.put("rpimagePath",msg.get("RP_IMAGE_PATH"));
+        resList.add(res);
+      }
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+  return resList;
+}
+
+@Override
+public void getLessonPlan(int lessonId, int lessonNum,int lessonWeek,
+    HashMap<String, Object> resMap) {
+ try {
+   HashMap<String, Object> planMap = courseService.getLessonPlan(lessonId, lessonNum,lessonWeek);
+   if(planMap != null){
+     resMap.put("lessonPlan",(String)planMap.get("LESSON_CONTENT"));
+     resMap.put("lessonPrt",(String)planMap.get("LESSON_PRT"));
+   }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
   
   
-  
+ 
+
   
   
   

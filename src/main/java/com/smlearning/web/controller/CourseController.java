@@ -565,6 +565,12 @@ public class CourseController extends BaseController {
   public String manageLesson() {
     return "jsp/study/manageLesson";
   }
+  
+  
+  @RequestMapping("/manageTempLesson")
+  public String manageTempLesson() {
+    return "jsp/study/manageTempLesson";
+  }
 
   /**
    * 获取课程进度数据表格
@@ -669,6 +675,23 @@ public class CourseController extends BaseController {
   @RequestMapping("/removeLesson")
   @ResponseBody
   public Json removeLesson(Long id, HttpSession session) {
+    Json json = new Json();
+
+    try {
+      this.courseScheduleService.removeLesson(id);
+      json.setMsg("删除成功！");
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+
+    return json;
+  }
+  
+  
+  @RequestMapping("/removeLessonTemp")
+  @ResponseBody
+  public Json removeLessonTemp(Long id, HttpSession session) {
     Json json = new Json();
 
     try {
@@ -1604,12 +1627,16 @@ public class CourseController extends BaseController {
   public String impLesson() {
     return "jsp/study/importLesson";
   }
+  
+  @RequestMapping("/impTempLesson")
+  public String impTempLesson() {
+    return "jsp/study/importTempLesson";
+  }
 
   @ResponseBody
   @RequestMapping("/importFromExcel")
   public Json importFromExcel(@RequestParam MultipartFile file, HttpServletRequest request) {
     Json json = new Json();
-    ArrayList<UserInfo> userList = null;
     long classId = ParamUtils.getLongParameter(request, "class_id", 0);
     String year = ParamUtils.getParameter(request, "year", "0");
     int term = ParamUtils.getIntParameter(request, "term", 0);
@@ -1678,11 +1705,91 @@ public class CourseController extends BaseController {
 
   }
   
+  
+  @ResponseBody
+  @RequestMapping("/importTempFromExcel")
+  public Json importTempFromExcel(@RequestParam MultipartFile file, HttpServletRequest request) {
+    Json json = new Json();
+    long classId = ParamUtils.getLongParameter(request, "class_id", 0);
+    String startTime = ParamUtils.getParameter(request, "startTime", "");
+    String endTime = ParamUtils.getParameter(request, "endTime", "");
+    try {
+      readTempExcel(file, classId, startTime, endTime);
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+
+  }
+  
+  private void readTempExcel(MultipartFile file, long gradeId,String startTime,String endTime) throws Exception {
+
+    ImportExecl poi = new ImportExecl();
+
+    String extName = FileUtil.getExtName(file.getOriginalFilename());
+    boolean flag;
+    if (".xls".equals(extName)) {
+      flag = true;
+    } else {
+      flag = false;
+    }
+
+    List<List<String>> list = poi.read(file.getInputStream(), flag);
+
+    if (list != null && list.size() > 0) {
+      String name;
+      List<String> titleList = list.get(0);
+      name = titleList.get(0);
+      HashMap<String, Object> lesson = new HashMap<String, Object>();
+      lesson.put("NAME", name);
+      lesson.put("START_DATE",DateUtil.stringsToDate(startTime));
+      lesson.put("END_DATE", DateUtil.stringsToDate(endTime));
+      lesson.put("GRADE_ID", gradeId);
+      // 添加
+      int lessonId = courseService.addLessonTempDefine(lesson);
+
+      if (lessonId > 0) {
+        HashMap<String, Object> detail = null;
+        for (int i = 2; i < list.size(); i++) {
+          if (i != 7) {// 第八行为上下午分割线
+            List<String> infoList = list.get(i);
+            if (infoList != null && infoList.size() == 7) {
+              detail = new HashMap<String, Object>();
+              detail.put("LESSON_ID", lessonId);
+              detail.put("LESSON_NUM", infoList.get(0));
+              detail.put("LESSON_TIME", infoList.get(1));
+              detail.put("WEEK_ONE_LESSON", infoList.get(2));
+              detail.put("WEEK_TWO_LESSON", infoList.get(3));
+              detail.put("WEEK_THREE_LESSON", infoList.get(4));
+              detail.put("WEEK_FOUR_LESSON", infoList.get(5));
+              detail.put("WEEK_FIVE_LESSON", infoList.get(6));
+              courseService.addLessonTempDetail(detail);
+            }
+          }
+        }
+
+      }
+    }
+
+  }
+  
   @RequestMapping(value = "getLessonList")
   @ResponseBody
   public HashMap<String, Object> getLessonList(DataGridModel dm, HttpServletRequest request) {
     HashMap<String, String> params = ParamUtils.getFilterStringParams(request);
     HashMap<String, Object> resMap = courseService.getLessonList(dm, params);
+    return resMap;
+  }
+  
+  @RequestMapping(value = "getLessonTempList")
+  @ResponseBody
+  public HashMap<String, Object> getLessonTempList(DataGridModel dm, HttpServletRequest request) {
+    HashMap<String, String> params = ParamUtils.getFilterStringParams(request);
+    HashMap<String, Object> resMap = courseService.getLessonTempList(dm, params);
     return resMap;
   }
   
@@ -1692,6 +1799,14 @@ public class CourseController extends BaseController {
     List<HashMap<String,Object>> list = courseService.getLessonDetailList(lessonId);
     request.setAttribute("resList",list);
     return "jsp/study/lessDetail";
+  }
+  
+  @RequestMapping(value = "getLessonTempDetailList")
+  public String getLessonTempDetailList(HttpServletRequest request){
+    int lessonId = ParamUtils.getIntParameter(request, "id",0);
+    List<HashMap<String,Object>> list = courseService.getLessonTempDetailList(lessonId);
+    request.setAttribute("resList",list);
+    return "jsp/study/lessTempDetail";
   }
   
   @RequestMapping("/deleteLesson")
@@ -1710,6 +1825,21 @@ public class CourseController extends BaseController {
     return json;
   }
   
+  @RequestMapping("/deleteLessonTemp")
+  @ResponseBody
+  public Json deleteLessonTemp(HttpServletRequest request) {
+    Json json = new Json();
+    long[] ids = ParamUtils.getLongParameters(request, "id", 0);
+    try {
+      this.courseService.deleteLessonTemp(ids);
+      json.setMsg("删除成功！");
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
   @RequestMapping("/getPermLessons")
   @ResponseBody
   public HashMap<String, Object> getPermLessons(HttpServletRequest request) {
@@ -1721,4 +1851,503 @@ public class CourseController extends BaseController {
     resMap.put("info", resList);
     return resMap;
   }
+  
+  @RequestMapping("/addLessonPlan")
+  public ModelAndView addLessonPlan(HttpServletRequest request){
+    ModelAndView mv = new ModelAndView("jsp/study/importLessonPlan");
+    int lessonId = ParamUtils.getIntParameter(request, "lessonId",0);
+    mv.addObject("lessonId",lessonId);
+    return mv;
+  }
+  
+  @RequestMapping("/addLessonTempPlan")
+  public ModelAndView addLessonTempPlan(HttpServletRequest request){
+    ModelAndView mv = new ModelAndView("jsp/study/importLessonTempPlan");
+    int lessonId = ParamUtils.getIntParameter(request, "lessonId",0);
+    mv.addObject("lessonId",lessonId);
+    return mv;
+  }
+  
+  @ResponseBody
+  @RequestMapping("/importLessonPlan")
+  public Json importLessonPlan(@RequestParam MultipartFile file, HttpServletRequest request) {
+    Json json = new Json();
+    String startTime = ParamUtils.getParameter(request, "startTime", "");
+    String endTime = ParamUtils.getParameter(request, "endTime", "");
+    int lessonId = ParamUtils.getIntParameter(request, "lessonId", 0);
+    try {
+        readLessonPlan(file, lessonId, startTime, endTime);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+
+  }
+  
+  private void readLessonPlan(MultipartFile file,int lessonId,String startTime,String endTime)throws Exception{
+    ImportExecl poi = new ImportExecl();
+
+    String extName = FileUtil.getExtName(file.getOriginalFilename());
+    boolean flag;
+    if (".xls".equals(extName)) {
+      flag = true;
+    } else {
+      flag = false;
+    }
+
+    HashMap<String,HashMap<String,List<String>>> resPlanMap = new HashMap<String,HashMap<String,List<String>>>();
+    List<List<String>> list = poi.read(file.getInputStream(), flag);
+    if(list!=null&&list.size()>0){
+      for(int i=2;i<list.size();i++){
+        List<String> resList = list.get(i);
+        if(resList !=null&&resList.size()>0){
+          String week = getWeek(resList.get(0));
+          HashMap<String,List<String>> weekPanMap = resPlanMap.get(week);
+          if(weekPanMap == null){
+            weekPanMap = new HashMap<String,List<String>>();
+            resPlanMap.put(week, weekPanMap);
+          }
+          for(int j = 1;j<resList.size();j++){
+            String category = list.get(1).get(j).trim();
+            List<String> categoryList = weekPanMap.get(category);
+            if(categoryList == null){
+              categoryList = new ArrayList<String>();
+              weekPanMap.put(category,categoryList);
+            }
+            String content = resList.get(j);
+            if(StringUtils.isNotBlank(content))
+              categoryList.add(content);
+          }
+        }
+      }
+    }
+
+    List<HashMap<String,Object>> allPlans = new ArrayList<HashMap<String,Object>>();
+    
+    List<HashMap<String,Object>> lessonList = courseService.getLessonDetailList(lessonId);
+    HashMap<String,Object> planMap= null;
+    if(lessonList != null && lessonList.size() > 0){
+      for(HashMap<String,Object> lesson : lessonList){
+        int lessonNum = (Integer)lesson.get("LESSON_NUM");
+        String oneLesson = (String)lesson.get("WEEK_ONE_LESSON");
+        HashMap<String,List<String>> cateoryMap =  resPlanMap.get("WEEK_ONE_LESSON");
+        if(cateoryMap != null){
+          List<String> planList = cateoryMap.get(oneLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",1);
+            planMap.put("LESSON_NAME",oneLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String twoLesson = (String)lesson.get("WEEK_TWO_LESSON");
+        HashMap<String,List<String>> cateory2Map =  resPlanMap.get("WEEK_TWO_LESSON");
+        if(cateory2Map != null){
+          List<String> planList = cateory2Map.get(twoLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",2);
+            planMap.put("LESSON_NAME",twoLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String threeLesson = (String)lesson.get("WEEK_THREE_LESSON");
+        HashMap<String,List<String>> cateory3Map =  resPlanMap.get("WEEK_THREE_LESSON");
+        if(cateory3Map != null){
+          List<String> planList = cateory3Map.get(threeLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",3);
+            planMap.put("LESSON_NAME",threeLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String fourLesson = (String)lesson.get("WEEK_FOUR_LESSON");
+        HashMap<String,List<String>> cateory4Map =  resPlanMap.get("WEEK_FOUR_LESSON");
+        if(cateory4Map != null){
+          List<String> planList = cateory4Map.get(fourLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",4);
+            planMap.put("LESSON_NAME",fourLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String fiveLesson = (String)lesson.get("WEEK_FIVE_LESSON");
+        HashMap<String,List<String>> cateory5Map =  resPlanMap.get("WEEK_FIVE_LESSON");
+        if(cateory5Map != null){
+          List<String> planList = cateory5Map.get(fiveLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",5);
+            planMap.put("LESSON_NAME",fiveLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String sixLesson = (String)lesson.get("WEEK_SIX_LESSON");
+        HashMap<String,List<String>> cateory6Map =  resPlanMap.get("WEEK_SIX_LESSON");
+        if(cateory6Map != null){
+          List<String> planList = cateory6Map.get(fiveLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",6);
+            planMap.put("LESSON_NAME",sixLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+        String sevenLesson = (String)lesson.get("WEEK_SEVEN_LESSON");
+        HashMap<String,List<String>> cateory7Map =  resPlanMap.get("WEEK_SEVEN_LESSON");
+        if(cateory7Map != null){
+          List<String> planList = cateory7Map.get(fiveLesson);
+          if(planList!=null&&planList.size()>0){
+            planMap = new HashMap<String,Object>();
+            planMap.put("LESSON_ID",lessonId);
+            planMap.put("LESSON_NUM",lessonNum);
+            planMap.put("LESSON_WEEK",7);
+            planMap.put("LESSON_NAME",sevenLesson);
+            planMap.put("LESSON_CONTENT",planList.get(0));
+            planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+            planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+            planList.remove(0);
+            allPlans.add(planMap);
+          }
+        }
+      }
+    }
+    
+    courseService.insertLessonPlan(allPlans);
+  }
+  
+  @ResponseBody
+  @RequestMapping("/importLessonTempPlan")
+  public Json importLessonTempPlan(@RequestParam MultipartFile file, HttpServletRequest request) {
+    Json json = new Json();
+    String startTime = ParamUtils.getParameter(request, "startTime", "");
+    String endTime = ParamUtils.getParameter(request, "endTime", "");
+    int lessonId = ParamUtils.getIntParameter(request, "lessonId", 0);
+    try {
+        readLessonTempPlan(file, lessonId, startTime, endTime);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+  }
+    
+    private void readLessonTempPlan(MultipartFile file,int lessonId,String startTime,String endTime)throws Exception{
+      ImportExecl poi = new ImportExecl();
+
+      String extName = FileUtil.getExtName(file.getOriginalFilename());
+      boolean flag;
+      if (".xls".equals(extName)) {
+        flag = true;
+      } else {
+        flag = false;
+      }
+
+      HashMap<String,HashMap<String,List<String>>> resPlanMap = new HashMap<String,HashMap<String,List<String>>>();
+      List<List<String>> list = poi.read(file.getInputStream(), flag);
+      if(list!=null&&list.size()>0){
+        for(int i=2;i<list.size();i++){
+          List<String> resList = list.get(i);
+          if(resList !=null&&resList.size()>0){
+            String week = getWeek(resList.get(0));
+            HashMap<String,List<String>> weekPanMap = resPlanMap.get(week);
+            if(weekPanMap == null){
+              weekPanMap = new HashMap<String,List<String>>();
+              resPlanMap.put(week, weekPanMap);
+            }
+            for(int j = 1;j<resList.size();j++){
+              String category = list.get(1).get(j).trim();
+              List<String> categoryList = weekPanMap.get(category);
+              if(categoryList == null){
+                categoryList = new ArrayList<String>();
+                weekPanMap.put(category,categoryList);
+              }
+              String content = resList.get(j);
+              if(StringUtils.isNotBlank(content))
+                categoryList.add(content);
+            }
+          }
+        }
+      }
+
+      List<HashMap<String,Object>> allPlans = new ArrayList<HashMap<String,Object>>();
+      
+      List<HashMap<String,Object>> lessonList = courseService.getLessonTempDetailList(lessonId);
+      HashMap<String,Object> planMap= null;
+      if(lessonList != null && lessonList.size() > 0){
+        for(HashMap<String,Object> lesson : lessonList){
+          int lessonNum = (Integer)lesson.get("LESSON_NUM");
+          String oneLesson = (String)lesson.get("WEEK_ONE_LESSON");
+          HashMap<String,List<String>> cateoryMap =  resPlanMap.get("WEEK_ONE_LESSON");
+          if(cateoryMap != null){
+            List<String> planList = cateoryMap.get(oneLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",1);
+              planMap.put("LESSON_NAME",oneLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String twoLesson = (String)lesson.get("WEEK_TWO_LESSON");
+          HashMap<String,List<String>> cateory2Map =  resPlanMap.get("WEEK_TWO_LESSON");
+          if(cateory2Map != null){
+            List<String> planList = cateory2Map.get(twoLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",2);
+              planMap.put("LESSON_NAME",twoLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String threeLesson = (String)lesson.get("WEEK_THREE_LESSON");
+          HashMap<String,List<String>> cateory3Map =  resPlanMap.get("WEEK_THREE_LESSON");
+          if(cateory3Map != null){
+            List<String> planList = cateory3Map.get(threeLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",3);
+              planMap.put("LESSON_NAME",threeLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String fourLesson = (String)lesson.get("WEEK_FOUR_LESSON");
+          HashMap<String,List<String>> cateory4Map =  resPlanMap.get("WEEK_FOUR_LESSON");
+          if(cateory4Map != null){
+            List<String> planList = cateory4Map.get(fourLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",4);
+              planMap.put("LESSON_NAME",fourLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String fiveLesson = (String)lesson.get("WEEK_FIVE_LESSON");
+          HashMap<String,List<String>> cateory5Map =  resPlanMap.get("WEEK_FIVE_LESSON");
+          if(cateory5Map != null){
+            List<String> planList = cateory5Map.get(fiveLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",5);
+              planMap.put("LESSON_NAME",fiveLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String sixLesson = (String)lesson.get("WEEK_SIX_LESSON");
+          HashMap<String,List<String>> cateory6Map =  resPlanMap.get("WEEK_SIX_LESSON");
+          if(cateory6Map != null){
+            List<String> planList = cateory6Map.get(fiveLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",6);
+              planMap.put("LESSON_NAME",sixLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+          String sevenLesson = (String)lesson.get("WEEK_SEVEN_LESSON");
+          HashMap<String,List<String>> cateory7Map =  resPlanMap.get("WEEK_SEVEN_LESSON");
+          if(cateory7Map != null){
+            List<String> planList = cateory7Map.get(fiveLesson);
+            if(planList!=null&&planList.size()>0){
+              planMap = new HashMap<String,Object>();
+              planMap.put("LESSON_ID",lessonId);
+              planMap.put("LESSON_NUM",lessonNum);
+              planMap.put("LESSON_WEEK",7);
+              planMap.put("LESSON_NAME",sevenLesson);
+              planMap.put("LESSON_CONTENT",planList.get(0));
+              planMap.put("START_DATE",DateUtil.stringsToDate(startTime));
+              planMap.put("END_DATE",DateUtil.stringsToDate(endTime));
+              planList.remove(0);
+              allPlans.add(planMap);
+            }
+          }
+        }
+      }
+      
+      courseService.insertLessonTempPlan(allPlans);
+    }
+  
+
+  private String getWeek(String date){
+    String res = "";
+    switch (date) {
+      case "一":
+        res = "WEEK_ONE_LESSON";
+        break;
+      case "二":
+        res = "WEEK_TWO_LESSON";
+        break;
+      case "三":
+        res = "WEEK_THREE_LESSON";
+        break;
+      case "四":
+        res = "WEEK_FOUR_LESSON";
+        break;
+      case "五":
+        res = "WEEK_FIVE_LESSON";
+        break;
+      case "六":
+        res = "WEEK_SIX_LESSON";
+        break;
+      case "七":
+        res = "WEEK_SEVEN_LESSON";
+        break;
+      default:
+        break;
+    }
+    return res;
+  }
+  
+  @RequestMapping("/deleteLessonPlans")
+  @ResponseBody
+  public Json deleteLessonPlans(HttpServletRequest request) {
+    Json json = new Json();
+    String  ids = ParamUtils.getParameter(request, "ids","");
+    try {
+      String[] idArr = ids.split(",");
+      if(idArr != null){
+        for(String id : idArr){
+          if(StringUtils.isNotBlank(id)){
+            courseService.deleteLessonPlans(Integer.parseInt(id));
+          }
+        }
+      }
+      json.setMsg("删除成功！");
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
+  
+  @RequestMapping("/deleteLessonTempPlans")
+  @ResponseBody
+  public Json deleteLessonTempPlans(HttpServletRequest request) {
+    Json json = new Json();
+    String  ids = ParamUtils.getParameter(request, "ids","");
+    try {
+      String[] idArr = ids.split(",");
+      if(idArr != null){
+        for(String id : idArr){
+          if(StringUtils.isNotBlank(id)){
+            courseService.deleteLessonTempPlans(Integer.parseInt(id));
+          }
+        }
+      }
+      json.setMsg("删除成功！");
+      json.setSuccess(true);
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+    return json;
+  }
+  
+  
+  @RequestMapping("/manageCategoryplan")
+  public String manageCategoryplan() {
+    return "jsp/study/manageCategoryPlan";
+  }
+  
+  
+  @RequestMapping(value = "getCategoryPlanList")
+  @ResponseBody
+  public HashMap<String, Object> getCategoryPlanList(DataGridModel dm, HttpServletRequest request) {
+    HashMap<String, String> params = ParamUtils.getFilterStringParams(request);
+    HashMap<String, Object> resMap = courseService.getCategoryPlanList(dm, params);
+    return resMap;
+  }
+  
+  
+  @RequestMapping("/addCategoryPlan")
+  public String addCategoryPlan(HttpServletRequest request) {
+    return "jsp/study/addCategoryPlan";
+  }
+  
 }
+
+
+
+
+

@@ -503,6 +503,12 @@ public class CourseServiceImpl implements CourseService{
     return iacDB.getList("getLessonDetailList",search);
   }
   
+  public List<HashMap<String, Object>> getLessonTempDetailList(int lessonId) {
+    HashMap<String,Object> search = new HashMap<String, Object>();
+    search.put("lessonId", lessonId);
+    return iacDB.getList("getLessonTempDetailList",search);
+  }
+  
   @Override
   public void deleteLesson(long[] ids) {
     String delIds = null;
@@ -518,6 +524,22 @@ public class CourseServiceImpl implements CourseService{
   }
   
   
+  
+  
+  @Override
+  public void deleteLessonTemp(long[] ids) {
+    String delIds = null;
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    if(ids != null){
+        for(long id : ids){
+            delIds += ","+id;
+        }
+        params.put("ids",delIds);
+    }
+    iacDB.delete("deleteLessonTempDetail", params);
+    iacDB.delete("deleteLessonTemp", params);
+  }
+
   private long getGrade(long classId){
     HashMap<String,Object> params = new HashMap<String, Object>();
     params.put("classId",classId);
@@ -555,5 +577,96 @@ public class CourseServiceImpl implements CourseService{
       return 500;
     }
   }
+
+  @Override
+  public void insertLessonPlan(List<HashMap<String, Object>> plans) {
+   if(plans != null){
+     for(HashMap<String,Object> plan : plans){
+       if(plan != null){
+         iacDB.insertDynamic("lesson_plans",plan);
+       }
+     }
+   }
+    
+  }
+  
+  public void insertLessonTempPlan(List<HashMap<String, Object>> plans) {
+    if(plans != null){
+      for(HashMap<String,Object> plan : plans){
+        if(plan != null){
+          iacDB.insertDynamic("lesson_temp_plans",plan);
+        }
+      }
+    }
+     
+   }
+
+  @Override
+  public void deleteLessonPlans(int lessonId) {
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("lessonId",lessonId);
+    params.put("date",new Date());
+    iacDB.delete("deleteLessonPlans", params);
+  }
+  
+  public void deleteLessonTempPlans(int lessonId) {
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("lessonId",lessonId);
+    params.put("date",new Date());
+    iacDB.delete("deleteLessonTempPlans", params);
+  }
+
+  @Override
+  public HashMap<String, Object> getLessonPlan(int lessonId, int lessonNum,int lessonWeek) {
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("lessonId",lessonId);
+    params.put("lessonNum",lessonNum);
+    params.put("lessonWeek",lessonWeek);
+    params.put("date",new Date());
+    List<HashMap<String, Object>> list = iacDB.getList("getLessonPlan", params);
+    if(list!=null&&list.size()>0)
+      return list.get(0);
+    return null;
+  }
+
+  @Override
+  public int addLessonTempDefine(HashMap<String, Object> lesson) {
+    return (int)iacDB.insertDynamicRInt("lesson_temp_define", lesson);
+  }
+
+  @Override
+  public void addLessonTempDetail(HashMap<String, Object> detail) {
+    iacDB.insertDynamic("lesson_temp_define_detail",detail);
+  }
+  
+  public HashMap<String, Object> getLessonTempList(DataGridModel dm, HashMap<String, String> params) {
+    HashMap<String,Object> search = new HashMap<String, Object>();
+    String gradeId = params.get("gradeId");
+    if(StringUtils.isNotBlank(gradeId)&&Integer.parseInt(gradeId) > -1){
+      search.put("gradeId", gradeId);
+    }
+    return iacDB.getDataGrid("getLessonTempList",dm,search);
+  }
+
+  @Override
+  public HashMap<String, Object> getCategoryPlanList(DataGridModel dm,
+      HashMap<String, String> params) {
+    HashMap<String,Object> search = new HashMap<String, Object>();
+    String name = params.get("name");
+    String gradeId = params.get("gradeId");
+    String category = params.get("category");
+    if(StringUtils.isNotBlank(name)){
+      search.put("name", name);
+    }
+    if(StringUtils.isNotBlank(gradeId)&&Integer.parseInt(gradeId) > 0){
+        search.put("gradeId", gradeId);
+    }
+    if(StringUtils.isNotBlank(category)&&Integer.parseInt(category) > 0){
+      search.put("category", category);
+  }
+    return iacDB.getDataGrid("getCategoryplanList", dm, search);
+  }
+  
+  
 	
 }

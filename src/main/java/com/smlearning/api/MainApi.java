@@ -169,6 +169,7 @@ public class MainApi extends BaseController {
         String objectName =  ParamUtils.getParameter(request, "objectName", "");
         String srcName =  ParamUtils.getParameter(request, "srcName", "");
         int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        String localImagePath =  ParamUtils.getParameter(request, "localImagePath", "");
         try {
             String imagePath = "";
             String realPath = multipartRequest.getSession()
@@ -184,8 +185,8 @@ public class MainApi extends BaseController {
                                     orderFile.getInputStream(),
                                     new File(realPath, orderFile
                                             .getOriginalFilename()));
-                    imagePath = realPath +"/"+orderFile
-                            .getOriginalFilename();
+                    imagePath = "/uploadFile/pic/"+orderFile
+                        .getOriginalFilename();
                 }
 
                 
@@ -199,6 +200,8 @@ public class MainApi extends BaseController {
             msgMap.put("OBJECT_NAME", objectName);
             msgMap.put("IMAGE_PATH",imagePath);
             msgMap.put("CLASS_ID",classId);
+            msgMap.put("LOCAL_IMAGE_PATH",localImagePath);
+            msgMap.put("IS_VALID",1);
             return apiService.saveOnlineMessage(msgMap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,5 +209,86 @@ public class MainApi extends BaseController {
         }
 
     }
+    
+    
+    @RequestMapping("/getOnlineMessage")
+    @ResponseBody
+    public HashMap<String, Object> getOnlineMessage(HttpServletRequest request) {
+        int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        int userId = ParamUtils.getIntParameter(request, "userId",0);
+        int offset = ParamUtils.getIntParameter(request, "offset",0);
+        int pagesize = ParamUtils.getIntParameter(request, "pagesize",5);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        apiService.getOnlineMessage(userId, classId, offset, pagesize, resMap);
+        return resMap;
+    }
+    
+    
+    @RequestMapping("/saveReplyMessage")
+    @ResponseBody
+    public int saveReplyMessage(HttpServletRequest request,
+            MultipartHttpServletRequest multipartRequest) {
+        String msg = ParamUtils.getParameter(request, "msg", "");
+        long mTime = ParamUtils.getLongParameter(request, "mTime", 0);
+        long msgId = ParamUtils.getLongParameter(request, "msgId", 0);
+        int rpUid = ParamUtils.getIntParameter(request, "rpUid", 0);
+        String rpName = ParamUtils.getParameter(request, "rpName","");
+        try {
+            String imagePath = "";
+            String realPath = multipartRequest.getSession()
+                    .getServletContext()
+                    .getRealPath("/uploadFile/pic");
+            
+            for (Iterator<?> it = multipartRequest.getFileNames(); it.hasNext();) {
+                String key = (String) it.next();
+                MultipartFile orderFile = multipartRequest.getFile(key);
+                if (orderFile.getOriginalFilename().length() > 0) {
+                    FileUtils
+                            .copyInputStreamToFile(
+                                    orderFile.getInputStream(),
+                                    new File(realPath, orderFile
+                                            .getOriginalFilename()));
+                    imagePath = "/uploadFile/pic/"+orderFile
+                            .getOriginalFilename();
+                }
 
+                
+            }
+            
+            HashMap<String,Object> msgMap= new HashMap<String, Object>();
+            msgMap.put("RP_MSG", msg);
+            msgMap.put("RP_TIME", new Date(mTime));
+            msgMap.put("MSG_ID", msgId);
+            msgMap.put("RP_UID", rpUid);
+            msgMap.put("RP_UNAME", rpName);
+            msgMap.put("RP_IMAGE_PATH",imagePath);
+            msgMap.put("IS_VALID",1);
+            return apiService.saveOnlineReplyMessage(msgMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+    }
+
+    @RequestMapping("/getOnlineReplyMessage")
+    @ResponseBody
+    public HashMap<String, Object> getOnlineReplyMessage(HttpServletRequest request) {
+        int msgId = ParamUtils.getIntParameter(request, "msgId", 0);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        List<HashMap<String,Object>> resList = apiService.getOnlineReplyMessage(msgId);
+        resMap.put("replyList",resList);
+        return resMap;
+    }
+    
+    @RequestMapping("/getLessonPlan")
+    @ResponseBody
+    public HashMap<String, Object> getLessonPlan(HttpServletRequest request) {
+        int lessonId = ParamUtils.getIntParameter(request, "lessonId", 0);
+        int lessonNum = ParamUtils.getIntParameter(request, "lessonNum", 0);
+        int lessonWeek = ParamUtils.getIntParameter(request, "lessonWeek", 0);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        apiService.getLessonPlan(lessonId, lessonNum,lessonWeek,resMap);
+        return resMap;
+    }
 }

@@ -1,8 +1,16 @@
 package com.smlearning.application.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import cn.com.iactive.db.DataGridModel;
+import cn.com.iactive.db.IACDB;
 
 import com.smlearning.application.service.OnlineForumService;
 import com.smlearning.domain.activity.OnlineForumActivity;
@@ -21,6 +29,9 @@ public class OnlineForumServiceImpl implements OnlineForumService {
 	
 	@Autowired
 	private OnlineForumActivity onlineForumActivity;
+	
+	@Autowired
+	private IACDB<HashMap<String,Object>> iacDB;
 	
 	/**
 	 * 返回学员列表数据信息
@@ -118,5 +129,70 @@ public class OnlineForumServiceImpl implements OnlineForumService {
 	public OnlineForum createChildUserForum(Long rootId, String question, Long creator) throws Exception{
 		return onlineForumActivity.createChildUserForum(rootId, question, creator);
 	}
+
+  @Override
+  public HashMap<String, Object> getOnlineMessageList(DataGridModel dm,
+      HashMap<String, String> params) {
+    HashMap<String, Object> search = new HashMap<String, Object>();
+    String startTime = params.get("startTime");
+    String endTime = params.get("endTime");
+    String sender = params.get("sender");
+    String classIdStr = params.get("classId");
+    int classId = 0;
+    if(StringUtils.isNotBlank(classIdStr)){
+      classId = Integer.parseInt(classIdStr);
+    }
+    if (StringUtils.isNotBlank(startTime)) {
+      search.put("startTime", startTime);
+    }
+    if (StringUtils.isNotBlank(endTime)) {
+      search.put("endTime", endTime);
+    }
+    if(StringUtils.isNotBlank(sender)){
+      search.put("sender",sender);
+    }
+    if(classId > 0){
+      search.put("classId",classId);
+    }
+    return iacDB.getDataGrid("getOnlineMessageList", dm, search);
+  }
+
+  @Override
+  public void setOnlineStatus(String ids,int isValid) {
+      if(StringUtils.isNotBlank(ids)){
+        String[] idArr = ids.split(",");
+        HashMap<String,Object> params = new HashMap<String,Object>();
+        params.put("IS_VALID", isValid);
+        
+        for(String id : idArr){
+          if(StringUtils.isNotBlank(id)){
+            params.put("ID",id);
+            iacDB.updateDynamic("online_message","ID",params);
+          }
+        }
+        
+      }
+  }
+
+  @Override
+  public List<HashMap<String, Object>> getReplyMessage(int msgId) {
+    HashMap<String,Object> params = new HashMap<String,Object>();
+    params.put("msgId",msgId);
+    return iacDB.getList("getReplyMessageByMsgId", params);
+  }
+
+  @Override
+  public void setOnlineReplyStatus(int id, int isValid) {
+    if(id>0){
+      HashMap<String,Object> params = new HashMap<String,Object>();
+      params.put("IS_VALID", isValid);
+      params.put("ID", id);
+      iacDB.updateDynamic("online_message_reply","ID", params);
+    }
+    
+  }
+	
+  
+	
 		
 }

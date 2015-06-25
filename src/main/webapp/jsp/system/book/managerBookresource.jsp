@@ -16,6 +16,7 @@
 	
 }
 </style>
+<script src="${pageContext.request.contextPath }/jslib/datePicker/WdatePicker.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var partId = '${partId}';
 	var partName = '${name}';

@@ -7,7 +7,7 @@
 		
 		$('#form').form({
 			
-			url : '${pageContext.request.contextPath}/courseController/importFromExcel.html',
+			url : '${pageContext.request.contextPath}/courseController/importTempFromExcel.html',
 			onSubmit : function() {
 				parent.$.messager.progress({
 					title : '提示',
@@ -50,25 +50,25 @@
 					<input type="hidden" name="year" class="easyui-validatebox span3" value="0">
 					</td>
 				</tr>
-				<!-- <tr>
-								<th>
-				学年：
-				</th>
-					<td>
-					<input type="text" name="year" class="easyui-validatebox span3" data-options="required:true">
-					(例如：2015)
-					</td>
-				</tr> -->
+				
 				<tr>
 				<th>
-					学期：
+					开始时间：
 				</th>
 					<td>
-				
-					<select name="term" class="easyui-combobox" data-options="width:140,height:29,editable:false,panelHeight:'auto'">
-							<option value="1">第一学期</option>
-							<option value="2">第二学期</option>
-					</select>
+				 <input name="startTime" id="startTime" class="easyui-validatebox span3"
+				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入开始时间">
+					
+					</td>
+				</tr>
+							<tr>
+				<th>
+					结束时间：
+				</th>
+					<td>
+				<input name="endTime" id="endTime" class="easyui-validatebox span3"
+				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入结束时间">
+					
 					</td>
 				</tr>
 				<tr>

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.smlearning.application.service.ManagerService;
@@ -494,4 +495,12 @@ public class ManagerController extends BaseController{
 	}
 	return json;
 	}
+	
+	   @RequestMapping("/zoomImage")
+	    public ModelAndView zoomImage(HttpServletRequest request){
+	      ModelAndView mv = new ModelAndView("jsp/system/zoomImage");
+	      String imagePath = request.getParameter("imagePath");
+	      mv.addObject("imagePath", imagePath);
+	      return mv;
+	    }
 }

@@ -25,4 +25,6 @@ public interface TableInfo {
   String VIDEO_RESOURCE = "course";
   
   String ONLINE_MSG = "online_message";
+  
+  String ONLINE_REPLY_MSG = "online_message_reply";
 }

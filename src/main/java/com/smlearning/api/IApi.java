@@ -25,4 +25,12 @@ public interface IApi {
     public List<HashMap<String, Object>> getClassTearch(int classId);
     
     public int saveOnlineMessage(HashMap<String, Object> msg);
+    
+    public int saveOnlineReplyMessage(HashMap<String, Object> msg);
+    
+    public void getOnlineMessage(int userId,int classId,int offset,int pageSize, HashMap<String, Object> resMap);
+    
+    public List<HashMap<String, Object>> getOnlineReplyMessage(int msgId);
+    
+    public void getLessonPlan(int lessonId,int lessonNum,int lessonWeek,HashMap<String,Object> resMap);
 }

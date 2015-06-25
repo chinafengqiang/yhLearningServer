@@ -1,5 +1,10 @@
 package com.smlearning.application.service;
 
+import java.util.HashMap;
+import java.util.List;
+
+import cn.com.iactive.db.DataGridModel;
+
 import com.smlearning.domain.entity.OnlineForum;
 import com.smlearning.infrastructure.utils.DataGrid;
 import com.smlearning.infrastructure.utils.PageHelper;
@@ -90,4 +95,13 @@ public interface OnlineForumService {
 	 * @throws Exception
 	 */
 	public OnlineForum createChildUserForum(Long rootId, String question, Long creator) throws Exception;
+	
+	
+	 public HashMap<String, Object> getOnlineMessageList(DataGridModel dm, HashMap<String, String> params);
+	 
+	 public void setOnlineStatus(String ids,int isValid);
+	 
+	 public List<HashMap<String, Object>> getReplyMessage(int msgId);
+	 
+	 public void setOnlineReplyStatus(int id,int isValid);
 }

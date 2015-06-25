@@ -16,7 +16,7 @@ $(function() {
 
 function getData(queryData){
 	dataGrid = $('#dataGrid').datagrid({
-		url : '${pageContext.request.contextPath}/courseController/getLessonList.html',
+		url : '${pageContext.request.contextPath}/courseController/getLessonTempList.html',
 		fitColumns : true,
 		border : false,
 		pagination : true,
@@ -38,19 +38,20 @@ function getData(queryData){
 				title : '名称',
 				width : 150,
 				sortable : true
-			},
-		{
-			field : 'YEAR',
-			title : '学年',
-			width : 150,
-			sortable : true
-		} ] ],
+			} ] ],
 		columns : [ [ {
-			field : 'TERM',
-			title : '学期',
+			field : 'START_DATE',
+			title : '开始时间',
 			width : 80,
 			sortable : true
-		},{
+		},
+		{
+			field : 'END_DATE',
+			title : '结束时间',
+			width : 80,
+			sortable : true
+		}
+		,{
 			field : 'gradeName',
 			title : '年级',
 			width : 150,
@@ -229,7 +230,7 @@ function importExcel(){
 		title : '课程表',
 		width : 500,
 		height : 400,
-		href : '${pageContext.request.contextPath}/courseController/impLesson.html',
+		href : '${pageContext.request.contextPath}/courseController/impTempLesson.html',
 		buttons : [ {
 			text : '添加',
 			handler : function() {
@@ -250,12 +251,12 @@ function searchList(){
 }
 
 function show(id){
-	var url = "${pageContext.request.contextPath}/courseController/getLessonDetailList.html?id="+id;
+	var url = "${pageContext.request.contextPath}/courseController/getLessonTempDetailList.html?id="+id;
 	showFun("课程表信息",url);
 }
 
 function deleteFun(){
-	var deleteUrl = "${pageContext.request.contextPath}/courseController/deleteLesson.html";
+	var deleteUrl = "${pageContext.request.contextPath}/courseController/deleteLessonTemp.html";
 	deleterow(deleteUrl,'dataGrid','ID');
 }
 
@@ -274,7 +275,7 @@ function importLessonPlan(){
 		title : '计划表',
 		width : 500,
 		height : 400,
-		href : '${pageContext.request.contextPath}/courseController/addLessonPlan.html?lessonId='+lessonId,
+		href : '${pageContext.request.contextPath}/courseController/addLessonTempPlan.html?lessonId='+lessonId,
 		buttons : [ {
 			text : '添加',
 			handler : function() {
@@ -288,7 +289,7 @@ function importLessonPlan(){
 
 //删除
 function deleteLessonPlan() {
-	var url = '${pageContext.request.contextPath}/courseController/deleteLessonPlans.html';
+	var url = '${pageContext.request.contextPath}/courseController/deleteLessonTempPlans.html';
 	var ids = "";
 	var rows = dataGrid.datagrid('getChecked');
 	$.each(rows, function(i, item) {

@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script type="text/javascript">
 	$(function() {
-		submitForm("${pageContext.request.contextPath}/dataSyncController/saveUser.html");
+		parent.$.messager.progress('close');
+		//submitForm("${pageContext.request.contextPath}/dataSyncController/saveUser.html");
 	});
 </script>
 			<table class="table" style="width: 100%;text-align: center;">

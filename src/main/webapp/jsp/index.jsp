@@ -34,8 +34,10 @@
                  "menus": [
                            
 						 { "menuid": "23", "menuname": "课程教学计划", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageLesson.html" },
-						 { "menuid": "24", "menuname": "课程进度管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecourseplan.html" },
-						 { "menuid": "25", "menuname": "课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecoursetable.html" },
+						 { "menuid": "24", "menuname": "临时课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageTempLesson.html" },
+						 { "menuid": "25", "menuname": "课程进度管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecourseplan.html" },
+						 { "menuid": "26", "menuname": "学科学期规划管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageCategoryplan.html" },
+						 { "menuid": "27", "menuname": "课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecoursetable.html" },
                  		
 						 
 						 
@@ -66,7 +68,7 @@
              {
                  "menuid": "5", "icon": "icon-sys", "menuname": "在线交流管理",
                  "menus": [
-						 { "menuid": "51", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageforum.html" }
+						 { "menuid": "51", "menuname": "在线交流", "icon": "icon-search", "url":"${pageContext.request.contextPath}/sysMessageController/manageOnlineMessage.html" }
                           
                  ]
              },

@@ -552,7 +552,7 @@
 		where a.courseware_category_id =b.id and a.ispublic = 1 
 	 </select>
 	 
-		<select id="getLessonList" resultType="java.util.HashMap">
+	<select id="getLessonList" resultType="java.util.HashMap">
 		select lesn.*,g.name as gradeName from lesson_define lesn left join sys_grade g on lesn.GRADE_ID = g.id where (1=1)
 		<if test="gradeId != null">
 			and GRADE_ID = #{gradeId}
@@ -563,8 +563,23 @@
 		</if>
 	</select>
 	
+	<select id="getLessonTempList" resultType="java.util.HashMap">
+		select lesn.*,g.name as gradeName from lesson_temp_define lesn left join sys_grade g on lesn.GRADE_ID = g.id where (1=1)
+		<if test="gradeId != null">
+			and GRADE_ID = #{gradeId}
+		</if>
+
+		<if test="sort != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
 	<select id="getLessonDetailList" resultType="java.util.HashMap">
-		select * from lesson_define_detail where LESSON_ID = #{lessonId}
+		select * from lesson_define_detail where LESSON_ID = #{lessonId} order by LESSON_NUM
+	</select>
+	
+	<select id="getLessonTempDetailList" resultType="java.util.HashMap">
+		select * from lesson_temp_define_detail where LESSON_ID = #{lessonId} order by LESSON_NUM
 	</select>
 	
 	<delete id="deleteLessonDetail">
@@ -576,10 +591,47 @@
 	</delete>
 	
 	<select id="getPermLessonList" resultType="java.util.HashMap">
-		select dd.LESSON_NUM as lnum,dd.LESSON_TIME as ltime,dd.WEEK_ONE_LESSON as lwone,
+		select d.ID as lid,dd.LESSON_NUM as lnum,dd.LESSON_TIME as ltime,dd.WEEK_ONE_LESSON as lwone,
 		dd.WEEK_TWO_LESSON as lwtwo,dd.WEEK_THREE_LESSON as lwthree,dd.WEEK_FOUR_LESSON as lwfour,
 		dd.WEEK_FIVE_LESSON as lwfive,dd.WEEK_SIX_LESSON as lwsix,dd.WEEK_SEVEN_LESSON as lwseven,d.NAME as lname 
 		from lesson_define d inner join lesson_define_detail dd on d.ID = dd.LESSON_ID
 		where d.TERM = #{TERM} and d.GRADE_ID = #{GRADE_ID} order by dd.ID
+	</select>
+	
+	<delete id="deleteLessonPlans">
+		 <![CDATA[delete from lesson_plans where LESSON_ID = #{lessonId} and START_DATE <= #{date} and END_DATE >= #{date} ]]>
+	</delete>
+	
+	<delete id="deleteLessonTempPlans">
+		 <![CDATA[delete from lesson_temp_plans where LESSON_ID = #{lessonId} and START_DATE <= #{date} and END_DATE >= #{date} ]]>
+	</delete>
+	
+	<select id="getLessonPlan" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		 <![CDATA[select * from lesson_plans where LESSON_ID = #{lessonId} and START_DATE <= #{date} and END_DATE >= #{date} and LESSON_NUM = #{lessonNum} and LESSON_WEEK = #{lessonWeek} ]]>
+	</select>
+	
+	<delete id="deleteLessonTempDetail">
+		delete from lesson_temp_define_detail where LESSON_ID in (${ids})
+	</delete>
+	
+	<delete id="deleteLessonTemp">
+		delete from lesson_temp_define where id in (${ids})
+	</delete>
+	
+	 <select id="getCategoryplanList" resultType="java.util.HashMap">
+		select a.*,g.name as gradeName from term_plan a  left join sys_grade g on a.grade_id = g.id
+		where (1=1)
+		<if test="name != null  and  name !='' ">
+			and a.NAME LIKE CONCAT(CONCAT('%', #{name}),'%')
+		</if>
+		<if test="gradeId != null">
+			and a.GRADE_ID = #{gradeId}
+		</if>
+		<if test="category != null">
+			and a.CATEGORY_ID = #{category}
+		</if>
+		<if test="sort != null">
+			order by ${sort} ${order}
+		</if>
 	</select>
 </mapper>

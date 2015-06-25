@@ -503,6 +503,7 @@ function deleteFun(url) {
 
 //编辑
 function showFun(title,url,width,height) {
+	parent.$.messager.progress('close');
 	width = width ? width : 600;
 	height = height ? height : 400;
 	dialog = parent.$.modalDialog({
