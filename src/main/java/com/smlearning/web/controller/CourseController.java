@@ -1848,6 +1848,20 @@ public class CourseController extends BaseController {
     HashMap<String, Object> resMap = new HashMap<String, Object>();
     List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
     int code = courseService.getLessons(classId, resList);
+    int tempId = courseService.getHasTempLesson(classId);
+    resMap.put("code", code);
+    resMap.put("info", resList);
+    resMap.put("tempId",tempId);
+    return resMap;
+  }
+  
+  @RequestMapping("/getPermLessonsTemp")
+  @ResponseBody
+  public HashMap<String, Object> getPermLessonsTemp(HttpServletRequest request) {
+    int lessonId = ParamUtils.getIntParameter(request, "lessonId", 0);
+    HashMap<String, Object> resMap = new HashMap<String, Object>();
+    List<HashMap<String, Object>> resList = new ArrayList<HashMap<String, Object>>();
+    int code = courseService.getLessonsTemp(lessonId, resList);
     resMap.put("code", code);
     resMap.put("info", resList);
     return resMap;

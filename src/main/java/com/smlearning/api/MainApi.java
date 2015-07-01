@@ -287,8 +287,9 @@ public class MainApi extends BaseController {
         int lessonId = ParamUtils.getIntParameter(request, "lessonId", 0);
         int lessonNum = ParamUtils.getIntParameter(request, "lessonNum", 0);
         int lessonWeek = ParamUtils.getIntParameter(request, "lessonWeek", 0);
+        boolean isTemp = ParamUtils.getBooleanParameter(request,"isTemp",false);
         HashMap<String, Object> resMap = new HashMap<String, Object>();
-        apiService.getLessonPlan(lessonId, lessonNum,lessonWeek,resMap);
+        apiService.getLessonPlan(lessonId, lessonNum,lessonWeek,resMap,isTemp);
         return resMap;
     }
 }

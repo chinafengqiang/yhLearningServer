@@ -391,9 +391,14 @@ public List<HashMap<String, Object>> getOnlineReplyMessage(int msgId) {
 
 @Override
 public void getLessonPlan(int lessonId, int lessonNum,int lessonWeek,
-    HashMap<String, Object> resMap) {
+    HashMap<String, Object> resMap,boolean isTemp) {
  try {
-   HashMap<String, Object> planMap = courseService.getLessonPlan(lessonId, lessonNum,lessonWeek);
+   HashMap<String, Object> planMap = null;
+   if(isTemp){
+     planMap = courseService.getLessonTempPlan(lessonId, lessonNum, lessonWeek);
+   }else{
+     planMap = courseService.getLessonPlan(lessonId, lessonNum,lessonWeek);
+   }
    if(planMap != null){
      resMap.put("lessonPlan",(String)planMap.get("LESSON_CONTENT"));
      resMap.put("lessonPrt",(String)planMap.get("LESSON_PRT"));
@@ -403,4 +408,6 @@ public void getLessonPlan(int lessonId, int lessonNum,int lessonWeek,
   }
 }
   
+
+
 }

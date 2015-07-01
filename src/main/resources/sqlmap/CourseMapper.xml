@@ -634,4 +634,20 @@
 			order by ${sort} ${order}
 		</if>
 	</select>
+	
+	<select id="getLessonTempId" resultType="java.util.HashMap">
+		<![CDATA[select ID from lesson_temp_define where GRADE_ID = #{GRADE_ID} and START_DATE <= #{NOW_TIME} and END_DATE >= #{NOW_TIME}]]>
+	</select>
+	
+	<select id="getPermLessonTempList" resultType="java.util.HashMap">
+		select dd.LESSON_ID as lid,dd.LESSON_NUM as lnum,dd.LESSON_TIME as ltime,dd.WEEK_ONE_LESSON as lwone,
+		dd.WEEK_TWO_LESSON as lwtwo,dd.WEEK_THREE_LESSON as lwthree,dd.WEEK_FOUR_LESSON as lwfour,
+		dd.WEEK_FIVE_LESSON as lwfive,dd.WEEK_SIX_LESSON as lwsix,dd.WEEK_SEVEN_LESSON as lwseven,d.NAME as lname 
+		from lesson_temp_define_detail dd inner join lesson_temp_define d on d.ID = dd.LESSON_ID
+		where dd.LESSON_ID = #{LESSON_ID}  order by dd.ID
+	</select>
+	
+	<select id="getLessonTempPlan" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		 <![CDATA[select * from lesson_temp_plans where LESSON_ID = #{lessonId} and START_DATE <= #{date} and END_DATE >= #{date} and LESSON_NUM = #{lessonNum} and LESSON_WEEK = #{lessonWeek} ]]>
+	</select>
 </mapper>

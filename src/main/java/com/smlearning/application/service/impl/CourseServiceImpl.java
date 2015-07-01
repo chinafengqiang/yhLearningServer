@@ -569,8 +569,9 @@ public class CourseServiceImpl implements CourseService{
       params.put("TERM",tem);
       
       List<HashMap<String, Object>> tempList = iacDB.getList("getPermLessonList", params);
-      if(tempList != null)
+      if(tempList != null){
         resList.addAll(tempList);
+      }
       return 200;
     } catch (Exception e) {
       e.printStackTrace();
@@ -666,6 +667,57 @@ public class CourseServiceImpl implements CourseService{
   }
     return iacDB.getDataGrid("getCategoryplanList", dm, search);
   }
+
+  @Override
+  public int getHasTempLesson(long classId) {
+    long gradeId = getGrade(classId);
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("GRADE_ID",gradeId);
+    params.put("NOW_TIME",new Date());
+    List<HashMap<String,Object>> idList = iacDB.getList("getLessonTempId", params);
+    if(idList != null && idList.size() > 0){
+      HashMap<String,Object> temp = idList.get(0);
+      if(temp != null){
+        int id = (Integer)temp.get("ID");
+        return id;
+      }
+    }
+    return 0;
+  }
+
+  @Override
+  public int getLessonsTemp(int lessonId, List<HashMap<String, Object>> resList) {
+    if(lessonId <= 0)
+      return 400;
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    try {
+      params.put("LESSON_ID",lessonId);
+      
+      List<HashMap<String, Object>> tempList = iacDB.getList("getPermLessonTempList", params);
+      if(tempList != null){
+        resList.addAll(tempList);
+      }
+      return 200;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return 500;
+    }
+  }
+
+  @Override
+  public HashMap<String, Object> getLessonTempPlan(int lessonId, int lessonNum, int lessWeek) {
+    HashMap<String,Object> params = new HashMap<String, Object>();
+    params.put("lessonId",lessonId);
+    params.put("lessonNum",lessonNum);
+    params.put("lessonWeek",lessWeek);
+    params.put("date",new Date());
+    List<HashMap<String, Object>> list = iacDB.getList("getLessonTempPlan", params);
+    if(list!=null&&list.size()>0)
+      return list.get(0);
+    return null;
+  }
+  
+  
   
   
 	

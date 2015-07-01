@@ -97,6 +97,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 						<value>/courseController/getPermCourses.html</value><!-- 获取有权限的视频-->
 						<value>/courseController/getCoursePlan.html</value><!-- 获取有权限的视频-->
 						<value>/courseController/getPermLessons.html</value><!-- 获取有权限的课程表-->
+						<value>/courseController/getPermLessonsTemp.html</value><!-- 获取有权限的临时课程表-->
 					</list> 
 				</property>
 			</bean>

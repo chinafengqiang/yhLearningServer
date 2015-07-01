@@ -323,4 +323,10 @@ public interface CourseService {
   public HashMap<String, Object> getLessonTempList(DataGridModel dm, HashMap<String, String> params);
   
   public HashMap<String, Object> getCategoryPlanList(DataGridModel dm, HashMap<String, String> params);
+  
+  public int getHasTempLesson(long classId);
+  
+  public int getLessonsTemp(int lessonId, List<HashMap<String, Object>> resList);
+  
+  public HashMap<String,Object> getLessonTempPlan(int lessonId,int lessonNum,int lessWeek);
 }

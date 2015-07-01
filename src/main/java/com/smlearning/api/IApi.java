@@ -32,6 +32,7 @@ public interface IApi {
     
     public List<HashMap<String, Object>> getOnlineReplyMessage(int msgId);
     
-    public void getLessonPlan(int lessonId,int lessonNum,int lessonWeek,HashMap<String,Object> resMap);
+    public void getLessonPlan(int lessonId,int lessonNum,int lessonWeek,HashMap<String,Object> resMap,boolean isTemp);
+    
 
 }
