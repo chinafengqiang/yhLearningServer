@@ -37,7 +37,8 @@
 						 { "menuid": "24", "menuname": "临时课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageTempLesson.html" },
 						 { "menuid": "25", "menuname": "课程进度管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecourseplan.html" },
 						 { "menuid": "26", "menuname": "学科学期规划管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageCategoryplan.html" },
-						 { "menuid": "27", "menuname": "课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecoursetable.html" },
+						 { "menuid": "27", "menuname": "教学通知管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/manageLessonMsg.html" },
+						 { "menuid": "28", "menuname": "课程表管理", "icon": "icon-search", "url": "${pageContext.request.contextPath}/courseController/managecoursetable.html" },
                  		
 						 
 						 

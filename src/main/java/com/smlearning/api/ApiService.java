@@ -407,6 +407,29 @@ public void getLessonPlan(int lessonId, int lessonNum,int lessonWeek,
     e.printStackTrace();
   }
 }
+
+@Override
+public List<HashMap<String, Object>> getLessonMessage(int classId) {
+  List<HashMap<String,Object>> resList = new ArrayList<HashMap<String,Object>>();
+  try {
+    List<HashMap<String,Object>> msgList = courseService.getLessonMessage(classId);
+    if(msgList != null && msgList.size() > 0){
+      HashMap<String,Object> res = null;
+      for(HashMap<String,Object> msg : msgList){
+        res = new HashMap<String,Object>();
+        res.put("id",msg.get("ID"));
+        res.put("title",msg.get("TITLE"));
+        res.put("content",msg.get("CONTENT"));
+        res.put("startTime",DateUtil.dateToString((Date)msg.get("START_DATE"),true));
+        res.put("endTime",DateUtil.dateToString((Date)msg.get("END_DATE"),true));
+        resList.add(res);
+      }
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  return resList;
+}
   
 
 

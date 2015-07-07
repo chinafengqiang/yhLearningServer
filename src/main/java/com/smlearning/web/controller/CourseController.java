@@ -2360,6 +2360,85 @@ public class CourseController extends BaseController {
     return "jsp/study/addCategoryPlan";
   }
   
+  @RequestMapping("manageLessonMsg")
+  public String managerLessonMsg(){
+      return "jsp/study/manageLessonMsg";
+  }
+  
+  @RequestMapping(value = "getLessonMsgList")
+  @ResponseBody
+  public HashMap<String, Object> getLessonMsgList(DataGridModel dm, HttpServletRequest request){
+      HashMap<String, String> params = ParamUtils.getFilterStringParams(request);
+      HashMap<String, Object> resMap = courseService.getLessonMsgList(dm, params);
+      return resMap;
+  }
+  
+  @RequestMapping("addLessonMsg")
+  public String addLessonMsg(){
+      return "jsp/study/addLessonMsg";
+  }
+  
+  @ResponseBody
+  @RequestMapping("/saveLessonMsg")
+  public Json saveLessonMsg(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+            HashMap<String,String> msg = ParamUtils.getParameters(request);
+        courseService.saveLessonMsg(msg);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+  }
+  
+  @RequestMapping("/editLessonMsg")
+  public ModelAndView editLessonMsg(int id){
+      ModelAndView mv = new ModelAndView("jsp/study/editLessonMsg");
+      HashMap<String,Object> msg = courseService.getLessonMsg(id);
+      mv.addObject("msg",msg);
+      return mv;
+  }
+  
+  
+  @ResponseBody
+  @RequestMapping("/updateLessonMsg")
+  public Json updateLessonMsg(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+            HashMap<String,String> msg = ParamUtils.getParameters(request);
+        courseService.updateLessonMsg(msg);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+  }
+  
+  @ResponseBody
+  @RequestMapping("/deleteLessonMsg")
+  public Json deleteLessonMsg(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+            String ids = ParamUtils.getParameter(request, "ids","");
+            courseService.deleteLessonMsg(ids);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+  }
+  
+  
 }
 
 

@@ -650,4 +650,28 @@
 	<select id="getLessonTempPlan" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		 <![CDATA[select * from lesson_temp_plans where LESSON_ID = #{lessonId} and START_DATE <= #{date} and END_DATE >= #{date} and LESSON_NUM = #{lessonNum} and LESSON_WEEK = #{lessonWeek} ]]>
 	</select>
+	
+    <select id="getLessonMsgList" resultType="java.util.HashMap">
+		select a.*,g.name as gradeName from lesson_message a  left join sys_grade g on a.GRADE_ID = g.id
+		where (1=1)
+		<if test="title != null  and  title !='' ">
+			and a.TITLE LIKE CONCAT(CONCAT('%', #{title}),'%')
+		</if>
+		<if test="gradeId != null">
+			and a.GRADE_ID = #{gradeId}
+		</if>
+
+		<if test="sort != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+    <select id="getLessonMsgById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from lesson_message where ID = #{id}
+    </select>
+    
+    <select id="getPermLessonMessage" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from lesson_message where GRADE_ID = #{gradeId} and END_DATE > #{startTime}
+    </select>
+    
 </mapper>

@@ -34,289 +34,289 @@ import com.smlearning.infrastructure.utils.PageHelper;
 @Service
 public class CourseServiceImpl implements CourseService{
 
-	static Logger logger = Logger.getLogger(CourseServiceImpl.class.getName());
-	
-	@Autowired
-	private CourseActivity courseActivity;
+    static Logger logger = Logger.getLogger(CourseServiceImpl.class.getName());
+    
+    @Autowired
+    private CourseActivity courseActivity;
 
-	@Autowired
-	private IACDB<HashMap<String,Object>> iacDB;
-	/**
-	 * 返回课程列表数据信息
-	 * @param sysMessageVO
-	 * @param ph
-	 * @return
-	 */
-	public DataGrid queryCoursePaning(CourseVO courseVO, PageHelper ph) {
-		return  courseActivity.queryCoursePaning(courseVO, ph);
-	}
-	
-	/**
-	 * 创建课程
-	 * @param name 课程名称
-	 * @param courseCategoryId 课程分类编号
-	 * @param lectuer主讲人
-	 * @param hour学时
-	 * @param description课程简介
-	 * @param teacherDescription 老师简介
-	 * @param canUpload  是否上传
-	 * @param courseDescription
-	 * @param creator 创建人
-	 * @return
-	 * @throws Exception
-	 */
-	public Course createCourse(String name, Long coursewareCategoryId, String lectuer, Integer hour, String description, 
-			String teacherDescription, String pic, String url, Long creator,Long gradeId,Integer isPublic) throws Exception {
-		return courseActivity.createCourse(name, coursewareCategoryId, lectuer, hour, description, teacherDescription, 
-				pic, url, creator,gradeId,isPublic);
-	}
-	
-	
-	/**
-	 * 修改课程
-	 * @param courseId 课程编号
-	 * @param name 课程名称
-	 * @param lectuer 主讲人
-	 * @param hour 学时
-	 * @param courseTypeEnum 使用类型
-	 * @param description 课程简介
-	 * @param teacherDescription 老师简介
-	 * @param canUpload 是否上传
-	 * @return
-	 * @throws NoCourseException 无此课程
-	 */
-	public Course modifyCourse(Long courseId, Long coursewareCategoryId, String name, String lectuer, Integer hour, String description, 
-			String teacherDescription, String pic, String url, Long creator,Long gradeId,Integer isPublic ) throws Exception {
-		return courseActivity.modifyCourse(courseId, coursewareCategoryId, name, lectuer, hour, description, teacherDescription, pic, url, creator,gradeId,isPublic);
-	}
-	
-	/**
-	 * 删除课程
-	 * @param courseId 课程编号
-	 * @param userId 操作者
-	 * @throws NoCourseException 无此课程
-	 * @throws CourseAlreadyUseException 此课程已经被选用
-	 */
-	public void removeCourse(Long courseId) throws Exception {
-		courseActivity.removeCourse(courseId);
-	}
-	
-	/**
-	 * 修改课程状态
-	 * @param courseId 课程编号
-	 * @param statusEnum 状态
-	 * @param userId 操作者
-	 * @throws NoCourseException 无此课程
-	 * @throws NonEnoughAccessException 无足够的权限
-	 */
-	public void modifyCourseStatus(Long courseId, CourseStatusEnum statusEnum) throws Exception {
-		courseActivity.modifyCourseStatus(courseId, statusEnum);
-	}
-	
-	/**
-	 * 获得课程对象信息
-	 * @param courseId 课程编号
-	 */
-	public Course getCourse(Long courseId) throws Exception {
-		return courseActivity.getCourse(courseId);
-	}
-	
-	/**
-	 * 返回数据信息
-	 * @return
-	 */
-	public List<CourseExtend> queryCourse(Long classId) {
-		return courseActivity.queryCourse(classId);
-	}
-	
-	/**
-	 * 返回数据信息
-	 * @return
-	 */
-	public CourseExtend queryCourseById(Long courseId) {
-		
-		return courseActivity.queryCourseById(courseId);
-	}
-	
+    @Autowired
+    private IACDB<HashMap<String,Object>> iacDB;
+    /**
+     * 返回课程列表数据信息
+     * @param sysMessageVO
+     * @param ph
+     * @return
+     */
+    public DataGrid queryCoursePaning(CourseVO courseVO, PageHelper ph) {
+        return  courseActivity.queryCoursePaning(courseVO, ph);
+    }
+    
+    /**
+     * 创建课程
+     * @param name 课程名称
+     * @param courseCategoryId 课程分类编号
+     * @param lectuer主讲人
+     * @param hour学时
+     * @param description课程简介
+     * @param teacherDescription 老师简介
+     * @param canUpload  是否上传
+     * @param courseDescription
+     * @param creator 创建人
+     * @return
+     * @throws Exception
+     */
+    public Course createCourse(String name, Long coursewareCategoryId, String lectuer, Integer hour, String description, 
+            String teacherDescription, String pic, String url, Long creator,Long gradeId,Integer isPublic) throws Exception {
+        return courseActivity.createCourse(name, coursewareCategoryId, lectuer, hour, description, teacherDescription, 
+                pic, url, creator,gradeId,isPublic);
+    }
+    
+    
+    /**
+     * 修改课程
+     * @param courseId 课程编号
+     * @param name 课程名称
+     * @param lectuer 主讲人
+     * @param hour 学时
+     * @param courseTypeEnum 使用类型
+     * @param description 课程简介
+     * @param teacherDescription 老师简介
+     * @param canUpload 是否上传
+     * @return
+     * @throws NoCourseException 无此课程
+     */
+    public Course modifyCourse(Long courseId, Long coursewareCategoryId, String name, String lectuer, Integer hour, String description, 
+            String teacherDescription, String pic, String url, Long creator,Long gradeId,Integer isPublic ) throws Exception {
+        return courseActivity.modifyCourse(courseId, coursewareCategoryId, name, lectuer, hour, description, teacherDescription, pic, url, creator,gradeId,isPublic);
+    }
+    
+    /**
+     * 删除课程
+     * @param courseId 课程编号
+     * @param userId 操作者
+     * @throws NoCourseException 无此课程
+     * @throws CourseAlreadyUseException 此课程已经被选用
+     */
+    public void removeCourse(Long courseId) throws Exception {
+        courseActivity.removeCourse(courseId);
+    }
+    
+    /**
+     * 修改课程状态
+     * @param courseId 课程编号
+     * @param statusEnum 状态
+     * @param userId 操作者
+     * @throws NoCourseException 无此课程
+     * @throws NonEnoughAccessException 无足够的权限
+     */
+    public void modifyCourseStatus(Long courseId, CourseStatusEnum statusEnum) throws Exception {
+        courseActivity.modifyCourseStatus(courseId, statusEnum);
+    }
+    
+    /**
+     * 获得课程对象信息
+     * @param courseId 课程编号
+     */
+    public Course getCourse(Long courseId) throws Exception {
+        return courseActivity.getCourse(courseId);
+    }
+    
+    /**
+     * 返回数据信息
+     * @return
+     */
+    public List<CourseExtend> queryCourse(Long classId) {
+        return courseActivity.queryCourse(classId);
+    }
+    
+    /**
+     * 返回数据信息
+     * @return
+     */
+    public CourseExtend queryCourseById(Long courseId) {
+        
+        return courseActivity.queryCourseById(courseId);
+    }
+    
 
-	/**
-	 * 返回数据信息
-	 * @return
-	 */
-	public List<CoursePlan> queryCoursePlan() {
-		return courseActivity.queryCoursePlan();
-	}
-	
-	/**
-	 * 返回课程列表数据信息
-	 * @param sysMessageVO
-	 * @param ph
-	 * @return
-	 */
-	public DataGrid queryCoursePlanPaning(CoursePlanVO coursePlanVO, PageHelper ph) {
-		return courseActivity.queryCoursePlanPaning(coursePlanVO, ph);
-	}
-	
-	/**
-	 * 创建
-	 * @param name 课件名称
-	 * @param courseSubjectId 课程专题编号
-	 * @param url 课件网址
-	 * @return
-	 * @throws NocourseSubjectException 无此课程专题
-	 */
-	public CoursePlan createCoursePlan(String name,  String imageUrl,long gradeId) throws Exception{
-		return courseActivity.createCoursePlan(name, imageUrl,gradeId);
-	}
-	
-	/**
-	 * 修改课件
-	 * @param coursewareId 课件编号
-	 * @param name 课件名称
-	 * @param url 课件网址
-	 * @return
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public CoursePlan modifyCoursePlan(Long coursePlanId, String name,  String imageUrl,long gradeId) throws Exception{
-		return courseActivity.modifyCoursePlan(coursePlanId, name, imageUrl,gradeId);
-		
-	}
-	
-	/**
-	 * 删除课件
-	 * @param coursewareId 课件编号
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public void removeCoursePlan(Long coursePlanId) throws Exception{
-		courseActivity.removeCoursePlan(coursePlanId);
-	}
-	
-	/**
-	 * 获得课程对象信息
-	 * @param courseId 课程编号
-	 */
-	public CoursePlan getCoursePlan(Long coursePlanId) throws Exception {
-		return  courseActivity.getCoursePlan(coursePlanId);
-	}
-	
-	
-	/**
-	 * 返回数据信息
-	 * @return
-	 */
-	public List<courseTable> queryCourseTable() {
-		return  courseActivity.queryCourseTable();
-	}
-	
-	/**
-	 * 返回课程列表数据信息
-	 * @param sysMessageVO
-	 * @param ph
-	 * @return
-	 */
-	public DataGrid queryCourseTablePaning(PageHelper ph) {
-		return  courseActivity.queryCourseTablePaning(ph);
-	}
-	
-	/**
-	 * 创建
-	 * @param name 课件名称
-	 * @param courseSubjectId 课程专题编号
-	 * @param url 课件网址
-	 * @return
-	 * @throws NocourseSubjectException 无此课程专题
-	 */
-	public courseTable createCourseTable(String name,  String imageUrl) throws Exception{
-		return  courseActivity.createCourseTable(name, imageUrl);
-	}
-	
-	/**
-	 * 修改课件
-	 * @param coursewareId 课件编号
-	 * @param name 课件名称
-	 * @param url 课件网址
-	 * @return
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public courseTable modifyCourseTable(Long courseTableId, String name,  String imageUrl) throws Exception{
-		return  courseActivity.modifyCourseTable(courseTableId,name,imageUrl);
-	}
-	
-	/**
-	 * 删除课件
-	 * @param coursewareId 课件编号
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public void removeCourseTable(Long courseTableId) throws Exception{
-		courseActivity.removeCourseTable(courseTableId);
-	}
-	
-	/**
-	 * 获得课程对象信息
-	 * @param courseId 课程编号
-	 */
-	public courseTable getCourseTable(Long courseTableId) throws Exception {
-		return  courseActivity.getCourseTable(courseTableId);
-	}
-	
-	/**
-	 * 返回数据信息
-	 * @return
-	 */
-	public List<classBook> queryClassBook() {
-		return  courseActivity.queryClassBook();
-	}
-	
-	/**
-	 * 获得课程对象信息
-	 * @param courseId 课程编号
-	 */
-	public classBook getClassBook(Long classBookId) throws Exception {
-		return  courseActivity.getClassBook(classBookId);
-	}
-	
-	/**
-	 * 删除课件
-	 * @param coursewareId 课件编号
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public void removeClassBook(Long classBookId) throws Exception{
-		courseActivity.removeClassBook(classBookId);
-	}
-	
-	/**
-	 * 修改课件
-	 * @param coursewareId 课件编号
-	 * @param name 课件名称
-	 * @param url 课件网址
-	 * @return
-	 * @throws NoCoursewareException 无此课件
-	 */
-	public classBook modifyclassBook(Long classBookId, String name,  String imageUrl) throws Exception{
-		return  courseActivity.modifyclassBook(classBookId,name, imageUrl);
-	}
-	
-	/**
-	 * 创建
-	 * @param name 课件名称
-	 * @param courseSubjectId 课程专题编号
-	 * @param url 课件网址
-	 * @return
-	 * @throws NocourseSubjectException 无此课程专题
-	 */
-	public classBook createClassBook(String name,  String imageUrl) throws Exception{
-		return  courseActivity.createClassBook(name, imageUrl);
-	}
-	
-	/**
-	 * 返回课程列表数据信息
-	 * @param sysMessageVO
-	 * @param ph
-	 * @return
-	 */
-	public DataGrid queryClassBookPaning(PageHelper ph) {
-		return  courseActivity.queryClassBookPaning(ph);
-	}
+    /**
+     * 返回数据信息
+     * @return
+     */
+    public List<CoursePlan> queryCoursePlan() {
+        return courseActivity.queryCoursePlan();
+    }
+    
+    /**
+     * 返回课程列表数据信息
+     * @param sysMessageVO
+     * @param ph
+     * @return
+     */
+    public DataGrid queryCoursePlanPaning(CoursePlanVO coursePlanVO, PageHelper ph) {
+        return courseActivity.queryCoursePlanPaning(coursePlanVO, ph);
+    }
+    
+    /**
+     * 创建
+     * @param name 课件名称
+     * @param courseSubjectId 课程专题编号
+     * @param url 课件网址
+     * @return
+     * @throws NocourseSubjectException 无此课程专题
+     */
+    public CoursePlan createCoursePlan(String name,  String imageUrl,long gradeId) throws Exception{
+        return courseActivity.createCoursePlan(name, imageUrl,gradeId);
+    }
+    
+    /**
+     * 修改课件
+     * @param coursewareId 课件编号
+     * @param name 课件名称
+     * @param url 课件网址
+     * @return
+     * @throws NoCoursewareException 无此课件
+     */
+    public CoursePlan modifyCoursePlan(Long coursePlanId, String name,  String imageUrl,long gradeId) throws Exception{
+        return courseActivity.modifyCoursePlan(coursePlanId, name, imageUrl,gradeId);
+        
+    }
+    
+    /**
+     * 删除课件
+     * @param coursewareId 课件编号
+     * @throws NoCoursewareException 无此课件
+     */
+    public void removeCoursePlan(Long coursePlanId) throws Exception{
+        courseActivity.removeCoursePlan(coursePlanId);
+    }
+    
+    /**
+     * 获得课程对象信息
+     * @param courseId 课程编号
+     */
+    public CoursePlan getCoursePlan(Long coursePlanId) throws Exception {
+        return  courseActivity.getCoursePlan(coursePlanId);
+    }
+    
+    
+    /**
+     * 返回数据信息
+     * @return
+     */
+    public List<courseTable> queryCourseTable() {
+        return  courseActivity.queryCourseTable();
+    }
+    
+    /**
+     * 返回课程列表数据信息
+     * @param sysMessageVO
+     * @param ph
+     * @return
+     */
+    public DataGrid queryCourseTablePaning(PageHelper ph) {
+        return  courseActivity.queryCourseTablePaning(ph);
+    }
+    
+    /**
+     * 创建
+     * @param name 课件名称
+     * @param courseSubjectId 课程专题编号
+     * @param url 课件网址
+     * @return
+     * @throws NocourseSubjectException 无此课程专题
+     */
+    public courseTable createCourseTable(String name,  String imageUrl) throws Exception{
+        return  courseActivity.createCourseTable(name, imageUrl);
+    }
+    
+    /**
+     * 修改课件
+     * @param coursewareId 课件编号
+     * @param name 课件名称
+     * @param url 课件网址
+     * @return
+     * @throws NoCoursewareException 无此课件
+     */
+    public courseTable modifyCourseTable(Long courseTableId, String name,  String imageUrl) throws Exception{
+        return  courseActivity.modifyCourseTable(courseTableId,name,imageUrl);
+    }
+    
+    /**
+     * 删除课件
+     * @param coursewareId 课件编号
+     * @throws NoCoursewareException 无此课件
+     */
+    public void removeCourseTable(Long courseTableId) throws Exception{
+        courseActivity.removeCourseTable(courseTableId);
+    }
+    
+    /**
+     * 获得课程对象信息
+     * @param courseId 课程编号
+     */
+    public courseTable getCourseTable(Long courseTableId) throws Exception {
+        return  courseActivity.getCourseTable(courseTableId);
+    }
+    
+    /**
+     * 返回数据信息
+     * @return
+     */
+    public List<classBook> queryClassBook() {
+        return  courseActivity.queryClassBook();
+    }
+    
+    /**
+     * 获得课程对象信息
+     * @param courseId 课程编号
+     */
+    public classBook getClassBook(Long classBookId) throws Exception {
+        return  courseActivity.getClassBook(classBookId);
+    }
+    
+    /**
+     * 删除课件
+     * @param coursewareId 课件编号
+     * @throws NoCoursewareException 无此课件
+     */
+    public void removeClassBook(Long classBookId) throws Exception{
+        courseActivity.removeClassBook(classBookId);
+    }
+    
+    /**
+     * 修改课件
+     * @param coursewareId 课件编号
+     * @param name 课件名称
+     * @param url 课件网址
+     * @return
+     * @throws NoCoursewareException 无此课件
+     */
+    public classBook modifyclassBook(Long classBookId, String name,  String imageUrl) throws Exception{
+        return  courseActivity.modifyclassBook(classBookId,name, imageUrl);
+    }
+    
+    /**
+     * 创建
+     * @param name 课件名称
+     * @param courseSubjectId 课程专题编号
+     * @param url 课件网址
+     * @return
+     * @throws NocourseSubjectException 无此课程专题
+     */
+    public classBook createClassBook(String name,  String imageUrl) throws Exception{
+        return  courseActivity.createClassBook(name, imageUrl);
+    }
+    
+    /**
+     * 返回课程列表数据信息
+     * @param sysMessageVO
+     * @param ph
+     * @return
+     */
+    public DataGrid queryClassBookPaning(PageHelper ph) {
+        return  courseActivity.queryClassBookPaning(ph);
+    }
 
   @Override
   public HashMap<String, Object> getCourseList(DataGridModel dm, HashMap<String, String> params) {
@@ -441,7 +441,7 @@ public class CourseServiceImpl implements CourseService{
     }
     return resList;
   }
-	
+    
   @Override
   public void modifyCourseStauts(String ids) {
     HashMap<String,Object> params = new HashMap<String, Object>();
@@ -716,9 +716,64 @@ public class CourseServiceImpl implements CourseService{
       return list.get(0);
     return null;
   }
+
+@Override
+public HashMap<String, Object> getLessonMsgList(DataGridModel dm,
+        HashMap<String, String> params) {
+    HashMap<String,Object> search = new HashMap<String, Object>();
+    String title = params.get("title");
+    String gradeId = params.get("gradeId");
+    if(StringUtils.isNotBlank(title)){
+      search.put("title", title);
+    }
+    if(StringUtils.isNotBlank(gradeId)&&Integer.parseInt(gradeId) > 0){
+        search.put("gradeId", gradeId);
+    }
+
+    return iacDB.getDataGrid("getLessonMsgList", dm, search);
+}
+
+    @Override
+    public void saveLessonMsg(HashMap<String, String> msg) {
+        iacDB.insertDynamic("lesson_message", msg);
+    }
+
+    @Override
+    public HashMap<String, Object> getLessonMsg(int id) {
+        return iacDB.get("getLessonMsgById", id);
+    }
+
+    @Override
+    public void updateLessonMsg(HashMap<String, String> msg) {
+        iacDB.updateDynamic("lesson_message", "ID", msg);
+    }
+
+    @Override
+    public void deleteLessonMsg(String ids) {
+        List<String> idList = new ArrayList<String>();
+        if(StringUtils.isNotBlank(ids)){
+            String[] idArr = ids.split(",");
+            for(String id : idArr){
+                if(StringUtils.isNotBlank(id)){
+                    idList.add(id);
+                }
+                
+            }
+        }
+        iacDB.deleteBatchDynamic("lesson_message", "ID", idList);
+    }
+
+    @Override
+    public List<HashMap<String, Object>> getLessonMessage(int classId) {
+      long gradeId = this.getGrade(classId);
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("gradeId",gradeId);
+      params.put("startTime",new Date());
+      return iacDB.getList("getPermLessonMessage",params);
+    }
   
   
+   
   
-  
-	
+    
 }

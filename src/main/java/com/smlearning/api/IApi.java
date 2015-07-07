@@ -34,5 +34,7 @@ public interface IApi {
     
     public void getLessonPlan(int lessonId,int lessonNum,int lessonWeek,HashMap<String,Object> resMap,boolean isTemp);
     
+    public List<HashMap<String,Object>> getLessonMessage(int classId);
+    
 
 }

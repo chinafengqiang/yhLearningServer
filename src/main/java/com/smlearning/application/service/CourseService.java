@@ -329,4 +329,16 @@ public interface CourseService {
   public int getLessonsTemp(int lessonId, List<HashMap<String, Object>> resList);
   
   public HashMap<String,Object> getLessonTempPlan(int lessonId,int lessonNum,int lessWeek);
+  
+  public HashMap<String, Object> getLessonMsgList(DataGridModel dm, HashMap<String, String> params);
+  
+  public void saveLessonMsg(HashMap<String, String> msg);
+  
+  public void updateLessonMsg(HashMap<String, String> msg);
+  
+  public HashMap<String,Object> getLessonMsg(int id);
+  
+  public void deleteLessonMsg(String ids);
+  
+  public  List<HashMap<String,Object>> getLessonMessage(int classId);
 }

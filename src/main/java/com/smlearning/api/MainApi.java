@@ -292,4 +292,16 @@ public class MainApi extends BaseController {
         apiService.getLessonPlan(lessonId, lessonNum,lessonWeek,resMap,isTemp);
         return resMap;
     }
+    
+    
+    @RequestMapping("/getLessonMessage")
+    @ResponseBody
+    public HashMap<String, Object> getLessonMessage(HttpServletRequest request) {
+        int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        List<HashMap<String,Object>> resList = apiService.getLessonMessage(classId);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        resMap.put("lessonMessageList",resList);
+        return resMap;
+    }
+    
 }
