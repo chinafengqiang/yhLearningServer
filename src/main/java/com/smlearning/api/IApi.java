@@ -2,6 +2,8 @@ package com.smlearning.api;
 import java.util.HashMap;
 import java.util.List;
 
+import com.smlearning.domain.entity.CoursePlan;
+
 public interface IApi {
   
     public List<HashMap<String, Object>> getBookCategory(int classId);
@@ -35,6 +37,12 @@ public interface IApi {
     public void getLessonPlan(int lessonId,int lessonNum,int lessonWeek,HashMap<String,Object> resMap,boolean isTemp);
     
     public List<HashMap<String,Object>> getLessonMessage(int classId);
+    
+    public int getLessonMessageCount(int classId);
+    
+    public void getCoursePlan(int classId,int offset,int pagesize,HashMap<String,Object> resMap);
+    
+    
     
 
 }

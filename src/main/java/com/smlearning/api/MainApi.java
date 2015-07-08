@@ -304,4 +304,25 @@ public class MainApi extends BaseController {
         return resMap;
     }
     
+    @RequestMapping("/getLessonMessageCount")
+    @ResponseBody
+    public HashMap<String, Object> getLessonMessageCount(HttpServletRequest request) {
+        int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        int count = apiService.getLessonMessageCount(classId);
+        resMap.put("lessonMessageCount",count);
+        return resMap;
+    }
+    
+    
+    @RequestMapping("/getCoursePlan")
+    @ResponseBody
+    public HashMap<String, Object> getCoursePlan(HttpServletRequest request) {
+        int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        int offset = ParamUtils.getIntParameter(request, "offset",0);
+        int pagesize = ParamUtils.getIntParameter(request, "pagesize",5);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        apiService.getCoursePlan(classId, offset, pagesize, resMap);
+        return resMap;
+    }
 }

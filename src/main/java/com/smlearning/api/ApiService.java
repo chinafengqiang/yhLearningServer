@@ -16,7 +16,9 @@ import com.smlearning.application.service.OnlineMsgService;
 import com.smlearning.application.service.SysGradeService;
 import com.smlearning.application.service.UserService;
 import com.smlearning.application.service.VideoService;
+import com.smlearning.domain.entity.CoursePlan;
 import com.smlearning.domain.entity.UserInfo;
+import com.smlearning.domain.vo.CoursePlanVO;
 import com.smlearning.infrastructure.utils.DateUtil;
 
 
@@ -430,7 +432,45 @@ public List<HashMap<String, Object>> getLessonMessage(int classId) {
   }
   return resList;
 }
+
+@Override
+public int getLessonMessageCount(int classId) {
+  try {
+    int res = courseService.getLessonMessageCount(classId);
+    return res;
+  } catch (Exception e) {
+    e.printStackTrace();
+    return 0;
+  }
+}
+
+public void getCoursePlan(int classId,int offset,int pagesize,HashMap<String,Object> resMap){
+  List<HashMap<String,Object>> resList = new ArrayList<HashMap<String,Object>>();
+  try {
+    long gradeId = courseService.getGrade(classId);
+    if(gradeId > 0){
+      long count = courseService.getCoursePlanCount(gradeId);
+      List<HashMap<String,Object>> list = courseService.getCoursePlan(gradeId, offset, pagesize);
+      HashMap<String, Object> res = null;
+      if(list != null && list.size() > 0){
+        for(HashMap<String, Object> plan : list){
+          res = new HashMap<String, Object>();
+          res.put("id",plan.get("id"));
+          res.put("name",plan.get("name"));
+          res.put("fileUrl",plan.get("image_url"));
+          resList.add(res);
+        }
+      }
+      resMap.put("planCount",count);
+      resMap.put("planList",resList);
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
   
+
+
 
 
 }

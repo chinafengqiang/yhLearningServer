@@ -540,7 +540,7 @@ public class CourseServiceImpl implements CourseService{
     iacDB.delete("deleteLessonTemp", params);
   }
 
-  private long getGrade(long classId){
+  public long getGrade(long classId){
     HashMap<String,Object> params = new HashMap<String, Object>();
     params.put("classId",classId);
     long gradeId = -1;
@@ -771,8 +771,44 @@ public HashMap<String, Object> getLessonMsgList(DataGridModel dm,
       params.put("startTime",new Date());
       return iacDB.getList("getPermLessonMessage",params);
     }
+
+    @Override
+    public int getLessonMessageCount(int classId) {
+      long gradeId = this.getGrade(classId);
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("gradeId",gradeId);
+      params.put("startTime",new Date());
+      HashMap<String,Object> resMap = iacDB.get("getPermLessonMessageCount", params);
+      long count = 0;
+      if(resMap != null){
+        count = (Long)resMap.get("msgCount");
+      }
+      return (int)count;
+    }
+
+    @Override
+    public List<HashMap<String, Object>> getCoursePlan(long gradeId,int offset,int pagesize) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("gradeId",gradeId);
+      params.put("offset",offset);
+      params.put("pagesize",pagesize);
+      return iacDB.getList("getCoursePlanLimit", params);
+    }
+
+    @Override
+    public long getCoursePlanCount(long gradeId) {
+      HashMap<String,Object> params = new HashMap<String, Object>();
+      params.put("gradeId",gradeId);
+      HashMap<String,Object> resMap = iacDB.get("getCoursePlanCount", params);
+      long count = 0;
+      if(resMap != null){
+        count = (Long)resMap.get("planCount");
+      }
+      return count;
+    }
   
-  
+    
+    
    
   
     

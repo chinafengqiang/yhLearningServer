@@ -673,5 +673,19 @@
     <select id="getPermLessonMessage" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select * from lesson_message where GRADE_ID = #{gradeId} and END_DATE > #{startTime}
     </select>
+   
+    <select id="getPermLessonMessageCount" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select count(*) as msgCount from lesson_message where GRADE_ID = #{gradeId} and END_DATE > #{startTime}
+    </select>
+   
+    <select id="getCoursePlanLimit" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from course_plan where grade_id = #{gradeId}
+		<if test="offset != null">
+			limit #{offset},#{pagesize}
+		</if>
+    </select>
     
+     <select id="getCoursePlanCount" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select count(*) as planCount from course_plan where grade_id = #{gradeId}
+    </select>
 </mapper>

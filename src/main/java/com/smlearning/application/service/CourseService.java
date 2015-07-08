@@ -340,5 +340,14 @@ public interface CourseService {
   
   public void deleteLessonMsg(String ids);
   
+  
   public  List<HashMap<String,Object>> getLessonMessage(int classId);
+  
+  public  int getLessonMessageCount(int classId);
+  
+  public long getGrade(long classId);
+  
+  public List<HashMap<String,Object>> getCoursePlan(long gradeId,int offset,int pagesize);
+  
+  public long getCoursePlanCount(long gradeId);
 }
