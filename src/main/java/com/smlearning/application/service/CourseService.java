@@ -350,4 +350,10 @@ public interface CourseService {
   public List<HashMap<String,Object>> getCoursePlan(long gradeId,int offset,int pagesize);
   
   public long getCoursePlanCount(long gradeId);
+  
+  public void saveCoursePlan(HashMap<String,String> plan);
+  
+  public void updateCoursePlan(HashMap<String,String> plan);
+  
+  public HashMap<String,Object> getCoursePlanById(long id);
 }

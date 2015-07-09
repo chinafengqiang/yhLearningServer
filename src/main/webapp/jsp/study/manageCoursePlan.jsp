@@ -25,9 +25,9 @@ function getData(queryData){
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
 		queryParams:queryData, //查询条件
-		sortName : 'name',
+		sortName : 'id',
 		loadMsg : '数据装载中......',
-		sortOrder : 'asc',
+		sortOrder : 'desc',
 		checkOnSelect : false,
 		selectOnCheck : false,
 		rownumbers : true,
@@ -54,6 +54,16 @@ function getData(queryData){
 			title : '所属班级',
 			width : 150,
 			sortable : true
+		},
+		{
+			field : 'start_date',
+			title : '开始日期',
+			width : 150
+		},
+		{
+			field : 'end_date',
+			title : '结束日期',
+			width : 150
 		},
 		{
 			field : 'action',

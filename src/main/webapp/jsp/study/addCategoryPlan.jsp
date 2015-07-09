@@ -71,11 +71,11 @@
 		<input type="hidden" id="coursewareCategoryId" name="coursewareCategoryId"  >
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th>课件名称：</th>
+					<th>名称：</th>
 					<td><input name="name" type="text" placeholder="请输入名称" class="easyui-validatebox span3" data-options="required:true" value=""></td>
 				</tr>
 				<tr>
-					<th>附件名称：</th>
+					<th>附件：</th>
 					<td><input id="url" name="imageUrl" type="text" placeholder="" class="easyui-validatebox span4"  readOnly="readonly"  value="">
 					<img src="<%=request.getContextPath()%>/images/shangc.gif"  style="cursor:pointer;" onclick="uploadSave()">
 					</td>

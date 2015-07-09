@@ -679,7 +679,7 @@
     </select>
    
     <select id="getCoursePlanLimit" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
-		select * from course_plan where grade_id = #{gradeId}
+		select * from course_plan where grade_id = #{gradeId} order by id desc
 		<if test="offset != null">
 			limit #{offset},#{pagesize}
 		</if>

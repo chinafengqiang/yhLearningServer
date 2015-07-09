@@ -458,6 +458,14 @@ public void getCoursePlan(int classId,int offset,int pagesize,HashMap<String,Obj
           res.put("id",plan.get("id"));
           res.put("name",plan.get("name"));
           res.put("fileUrl",plan.get("image_url"));
+          Date startDate = (Date)plan.get("start_date");
+          Date endDate = (Date)plan.get("end_date");
+          if(startDate != null){
+            res.put("startDate",DateUtil.dateToString(startDate, true));
+          }
+          if(endDate != null){
+            res.put("endDate",DateUtil.dateToString(endDate, true));
+          }
           resList.add(res);
         }
       }

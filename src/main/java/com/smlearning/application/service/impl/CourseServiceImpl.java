@@ -806,6 +806,31 @@ public HashMap<String, Object> getLessonMsgList(DataGridModel dm,
       }
       return count;
     }
+
+    private final static String fileName = "/uploadFile/file/";
+    @Override
+    public void saveCoursePlan(HashMap<String,String> plan) {
+      String imageUrl = (String)plan.get("image_url");
+      plan.put("image_url",fileName+imageUrl);
+      iacDB.insertDynamic("course_plan", plan);
+    }
+
+    
+    @Override
+    public void updateCoursePlan(HashMap<String,String> plan) {
+      String imageUrl = (String)plan.get("image_url");
+      if(imageUrl.contains("uploadFile")){
+        plan.put("image_url",imageUrl);
+      } else{
+        plan.put("image_url",fileName+imageUrl);
+      }
+      iacDB.updateDynamic("course_plan","id", plan);
+    }
+
+    @Override
+    public HashMap<String, Object> getCoursePlanById(long id) {
+      return iacDB.get("getCoursePlanById", id);
+    }
   
     
     

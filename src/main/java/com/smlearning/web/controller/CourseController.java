@@ -959,13 +959,14 @@ public class CourseController extends BaseController {
    */
   @RequestMapping("/createCoursePlan")
   @ResponseBody
-  public Json createCoursePlan(CoursePlan coursePlan) {
+  public Json createCoursePlan(CoursePlan coursePlan,HttpServletRequest request) {
     Json json = new Json();
 
     try {
-      this.courseService.createCoursePlan(coursePlan.getName(), coursePlan.getImageUrl(),
-          coursePlan.getGradeId());
-
+      //this.courseService.createCoursePlan(coursePlan.getName(), coursePlan.getImageUrl(),
+        //  coursePlan.getGradeId());
+      HashMap<String,String> plan = ParamUtils.getFilterStringParams(request);
+      courseService.saveCoursePlan(plan);
       json.setSuccess(true);
       json.setMsg("添加成功！");
       json.setObj(coursePlan);
@@ -984,13 +985,15 @@ public class CourseController extends BaseController {
   @RequestMapping("/editCoursePlan")
   public String editCoursePlan(HttpServletRequest request, Long id) {
 
-    CoursePlan coursePlan = null;
-    try {
-      coursePlan = courseService.getCoursePlan(id);
-      request.setAttribute("coursePlan", coursePlan);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    CoursePlan coursePlan = null;
+//    try {
+//      coursePlan = courseService.getCoursePlan(id);
+//      request.setAttribute("coursePlan", coursePlan);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    HashMap<String,Object> coursePlan = courseService.getCoursePlanById(id);
+    request.setAttribute("coursePlan", coursePlan);
     return "jsp/study/editCoursePlan";
   }
 
@@ -1002,12 +1005,16 @@ public class CourseController extends BaseController {
    */
   @RequestMapping("/modifyCoursePlan")
   @ResponseBody
-  public Json modifyCoursePlan(CoursePlan coursePlan) {
+  public Json modifyCoursePlan(CoursePlan coursePlan,HttpServletRequest request) {
     Json json = new Json();
 
     try {
-      this.courseService.modifyCoursePlan(coursePlan.getId(), coursePlan.getName(),
-          coursePlan.getImageUrl(), coursePlan.getGradeId());
+     // this.courseService.modifyCoursePlan(coursePlan.getId(), coursePlan.getName(),
+      //    coursePlan.getImageUrl(), coursePlan.getGradeId());
+      
+      HashMap<String,String> plan = ParamUtils.getFilterStringParams(request);
+      courseService.updateCoursePlan(plan);
+      
       json.setSuccess(true);
       json.setMsg("修改成功！");
       json.setObj(coursePlan);
@@ -1424,19 +1431,37 @@ public class CourseController extends BaseController {
   @RequestMapping("/sendCoursePlans")
   @ResponseBody
   public Json sendCoursePlans(Long id, HttpServletRequest request) {
-    CoursePlan coursePlan = null;
+    //CoursePlan coursePlan = null;
+    HashMap<String, Object> planMap = null;
     try {
-      coursePlan = courseService.getCoursePlan(id);
+      //coursePlan = courseService.getCoursePlan(id);
+      planMap = courseService.getCoursePlanById(id);
     } catch (Exception e1) {
       e1.printStackTrace();
     }
+    String name = (String)planMap.get("name");
+    String imageUrl = (String)planMap.get("image_url");
+    Date startDate = (Date)planMap.get("start_date");
+    Date endDate = (Date)planMap.get("end_date");
 
     String insertContent =
-        " insert into course_plan (name, image_url)" + " values ('" + coursePlan.getName() + "', "
-            + "'" + coursePlan.getImageUrl() + "'); commit; ";
+        " insert into course_plan (name, image_url,start_date,end_date)" + " values ('" + name + "', "
+            + "'" + imageUrl + "'";
+    if(startDate != null){
+      insertContent += ",'"+startDate+"'";
+    }else{
+      insertContent += ",null";
+    }
+    if(endDate != null){
+      insertContent += ",'"+endDate+"'";
+    }else{
+      insertContent += ",null";
+    }
+    
+    insertContent += "); commit; ";
 
     String uploadDir =
-        request.getSession().getServletContext().getRealPath(coursePlan.getImageUrl());
+        request.getSession().getServletContext().getRealPath(imageUrl);
     String uploadDirName = uploadDir.substring(uploadDir.lastIndexOf("\\") + 1, uploadDir.length());
     System.out.println("uploadDir==" + uploadDir);
     System.out.println("uploadDirName==" + uploadDirName);

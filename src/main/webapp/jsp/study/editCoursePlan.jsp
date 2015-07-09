@@ -55,18 +55,36 @@
 					<td><input name="name" type="text" placeholder="请输入名称" class="easyui-validatebox span3" data-options="required:true"   value="${coursePlan.name}"></td>
 				</tr>
 				<tr>
-					<th>附件名称：</th>
-					<td><input id="url" name="imageUrl" type="text" placeholder="" class="easyui-validatebox span4"  readOnly="readonly""  value="${coursePlan.imageUrl}">
+					<th>附件：</th>
+					<td><input id="url" name="image_url" type="text" placeholder="" class="easyui-validatebox span4"  readOnly="readonly""  value="${coursePlan.image_url}">
 					<img src="<%=request.getContextPath()%>/images/shangc.gif"  style="cursor:pointer;" onclick="uploadSave()">
 					</td>
 				</tr>
 					<tr>
 					<th>所属年级</th>
 					<td>
-					 <select name="gradeId" id="grade_id" style="width:160px;height: 30px;"></select>
+					 <select name="grade_id" id="grade_id" style="width:160px;height: 30px;"></select>
 			        <script type="text/javascript">
-			       		attachGradeSelectBox(document.getElementById("grade_id"),'${coursePlan.gradeId}',"${pageContext.request.contextPath }/sysGradeController/getGradeJson.html;");	
+			       		attachGradeSelectBox(document.getElementById("grade_id"),'${coursePlan.grade_id}',"${pageContext.request.contextPath }/sysGradeController/getGradeJson.html;");	
 					</script>
+					</td>
+				</tr>
+				<tr>
+				<th width="40%">
+				开始时间： 
+				</th>
+					<td>					
+			 <input name="start_date" id="startTime" class="easyui-validatebox span3" value="${coursePlan.start_date }"
+				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入开始时间">
+					</td>
+				</tr>
+				<tr>
+				<th>
+				结束时间： 
+				</th>
+					<td>					
+			 <input name="end_date" id="endTime" class="easyui-validatebox span3"  value="${coursePlan.end_date }"
+				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入结束时间">
 					</td>
 				</tr>
 			</table>
