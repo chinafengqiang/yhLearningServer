@@ -284,4 +284,8 @@
        select * from course_plan where id=#{id}
    </select>
    
+   <select id="getCategoryPlanById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       select * from term_plan where ID=#{id}
+   </select>
+   
 </mapper>

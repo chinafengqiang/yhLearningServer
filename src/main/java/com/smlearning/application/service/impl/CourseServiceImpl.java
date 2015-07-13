@@ -831,7 +831,76 @@ public HashMap<String, Object> getLessonMsgList(DataGridModel dm,
     public HashMap<String, Object> getCoursePlanById(long id) {
       return iacDB.get("getCoursePlanById", id);
     }
+
+    @Override
+    public void saveCategoryPlan(HashMap<String, String> plan) {
+      String imageUrl = (String)plan.get("PLAN_URL");
+      plan.put("PLAN_URL",fileName+imageUrl);
+      int categoryId = Integer.parseInt(plan.get("CATEGORY_ID"));
+      HashMap<String, Object> category = this.getCategoryById(categoryId);
+      String categoryName = "";
+      if(category != null){
+        categoryName = (String)category.get("name");
+      }
+      plan.put("CATEGORY_NAME",categoryName);
+      iacDB.insertDynamic("term_plan", plan);
+    }
+
+    @Override
+    public HashMap<String, Object> getCategoryById(int id) {
+      return iacDB.get("getCourseCategoryById",id);
+    }
+
+    @Override
+    public HashMap<String, Object> getCategoryPlan(int id) {
+      return iacDB.get("getCategoryPlanById",id);
+    }
+
+    @Override
+    public void updateCategoryPlan(HashMap<String, String> plan) {
+      String imageUrl = (String)plan.get("PLAN_URL");
+      if(imageUrl.contains("uploadFile")){
+        plan.put("PLAN_URL",imageUrl);
+      } else{
+        plan.put("PLAN_URL",fileName+imageUrl);
+      }
+      int categoryId = Integer.parseInt(plan.get("CATEGORY_ID"));
+      HashMap<String, Object> category = this.getCategoryById(categoryId);
+      String categoryName = "";
+      if(category != null){
+        categoryName = (String)category.get("name");
+      }
+      plan.put("CATEGORY_NAME",categoryName);
+      iacDB.updateDynamic("term_plan","ID", plan);
+    }
+
+    @Override
+    public void deleteCategoryPlan(int id) {
+        HashMap<String,Object> params = new HashMap<String,Object>();
+        params.put("ID",id);
+        iacDB.deleteDynamic("term_plan", params);
+    }
+
+    @Override
+    public void setCoursePlanStatus(int id, int status) {
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      map.put("id",id);
+      map.put("status",status);
+      iacDB.updateDynamic("course_plan","id",map);
+    }
+
+    @Override
+    public void setCategoryPlanStatus(int id, int status) {
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      map.put("ID",id);
+      map.put("STATUS",status);
+      iacDB.updateDynamic("term_plan","ID",map);
+    }
   
+    
+    
+    
+    
     
     
    

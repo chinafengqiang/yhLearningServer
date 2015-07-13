@@ -688,4 +688,9 @@
      <select id="getCoursePlanCount" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
 		select count(*) as planCount from course_plan where grade_id = #{gradeId}
     </select>
+    
+   <select id="getCourseCategoryById" resultType="java.util.HashMap" parameterType="java.util.HashMap"> 
+		select * from courseware_category where id = #{id}
+    </select>
+     
 </mapper>

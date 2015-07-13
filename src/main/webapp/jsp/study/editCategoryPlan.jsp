@@ -14,7 +14,7 @@
 		
 		parent.$.messager.progress('close');
 		$('#form').form({
-			url : '${pageContext.request.contextPath}/courseController/createCategoryPlan.html',
+			url : '${pageContext.request.contextPath}/courseController/updateCategoryPlan.html',
 			onSubmit : function() {
 				parent.$.messager.progress({
 					title : '提示',
@@ -71,11 +71,14 @@
 			<table class="table table-hover table-condensed">
 				<tr>
 					<th>名称：</th>
-					<td><input name="NAME" type="text" placeholder="请输入名称" class="easyui-validatebox span3" data-options="required:true" value=""></td>
+					<td>
+					<input name="NAME" type="text" placeholder="请输入名称" class="easyui-validatebox span3" data-options="required:true" value="${plan.NAME }">
+					<input name="ID" type="hidden" value="${plan.ID }">
+					</td>
 				</tr>
 				<tr>
 					<th>附件：</th>
-					<td><input id="url" name="PLAN_URL" type="text" placeholder="" class="easyui-validatebox span4"  readOnly="readonly"  value="">
+					<td><input id="url" name="PLAN_URL" type="text" placeholder="" class="easyui-validatebox span4"  readOnly="readonly"  value="${plan.PLAN_URL }">
 					<img src="<%=request.getContextPath()%>/images/shangc.gif"  style="cursor:pointer;" onclick="uploadSave()">
 					</td>
 				</tr>
@@ -87,7 +90,7 @@
 					</select> <script type="text/javascript">
 						attachGradeSelectBox(
 								document.getElementById("category"),
-								'',
+								'${plan.CATEGORY_ID}',
 								"${pageContext.request.contextPath }/coursewareController/getCoursewareCategorySelect.html;");
 					</script></td>
 				</tr>
@@ -96,7 +99,7 @@
 					<td>
 					 <select name="GRADE_ID" id="grade_id" style="width:160px;height: 30px;"></select>
 			        <script type="text/javascript">
-			       		attachGradeSelectBox(document.getElementById("grade_id"),'',"${pageContext.request.contextPath }/sysGradeController/getGradeJson.html;");	
+			       		attachGradeSelectBox(document.getElementById("grade_id"),'${plan.GRADE_ID}',"${pageContext.request.contextPath }/sysGradeController/getGradeJson.html;");	
 					</script>
 					</td>
 				</tr>
@@ -105,7 +108,7 @@
 				开始时间： 
 				</th>
 					<td>					
-			 <input name="START_DATE" id="startTime" class="easyui-validatebox span3"
+			 <input name="START_DATE" id="startTime" class="easyui-validatebox span3" value="${plan.START_DATE}"
 				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入开始时间">
 					</td>
 				</tr>
@@ -114,7 +117,7 @@
 				结束时间： 
 				</th>
 					<td>					
-			 <input name="END_DATE" id="endTime" class="easyui-validatebox span3"
+			 <input name="END_DATE" id="endTime" class="easyui-validatebox span3" value="${plan.END_DATE}"
 				onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" placeholder="请输入结束时间">
 					</td>
 				</tr>

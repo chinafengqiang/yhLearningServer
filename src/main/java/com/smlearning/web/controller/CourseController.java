@@ -1502,7 +1502,7 @@ public class CourseController extends BaseController {
               + VersionInfo.VALIDRATE + " \r\n" + "startValidDate=" + firstTime + " \r\n"
               + "endValidDate=" + endTime + " \r\n" + "Completed=0 \r\n";
       FileOperation.contentToTxt(path, content);
-      // coursewareService.modifyCoursewareStauts(id);
+      courseService.setCoursePlanStatus(id.intValue(), 1);
       json.setSuccess(true);
       json.setMsg("下发成功!");
     } catch (Exception e) {
@@ -2463,6 +2463,171 @@ public class CourseController extends BaseController {
     return json;
   }
   
+  
+  @RequestMapping("/createCategoryPlan")
+  @ResponseBody
+  public Json createCategoryPlan(HttpServletRequest request) {
+    Json json = new Json();
+
+    try {
+      HashMap<String,String> plan = ParamUtils.getFilterStringParams(request);
+      courseService.saveCategoryPlan(plan);
+      json.setSuccess(true);
+      json.setMsg("添加成功！");
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+
+    return json;
+  }
+  
+  
+  @RequestMapping("/editCategoryPlan")
+  public ModelAndView editCategoryPlan(HttpServletRequest request){
+      ModelAndView mv = new ModelAndView("jsp/study/editCategoryPlan");
+      int id = ParamUtils.getIntParameter(request,"id", 0);
+      HashMap<String,Object> plan = courseService.getCategoryPlan(id);
+      mv.addObject("plan",plan);
+      return mv;
+  }
+  
+  
+  @RequestMapping("/updateCategoryPlan")
+  @ResponseBody
+  public Json updateCategoryPlan(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+      HashMap<String,String> plan = ParamUtils.getFilterStringParams(request);
+      courseService.updateCategoryPlan(plan);
+      json.setSuccess(true);
+      json.setMsg("添加成功！");
+    } catch (Exception e) {
+      json.setMsg(e.getMessage());
+    }
+
+    return json;
+  }
+  
+  
+  @ResponseBody
+  @RequestMapping("/deleteCategoryPlan")
+  public Json deleteCategoryPlan(HttpServletRequest request) {
+    Json json = new Json();
+    try {
+          int id = ParamUtils.getIntParameter(request, "id",0);
+          courseService.deleteCategoryPlan(id);
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.setMsg(e.getMessage());
+    }
+    json.setSuccess(true);
+    json.setMsg("成功导入");
+
+    return json;
+  }
+  
+  
+  @RequestMapping("/editProfileCategoryPlan")
+  public String editProfileCategoryPlan(HttpServletRequest request) {
+
+    
+    try {
+      int id = ParamUtils.getIntParameter(request, "id",0);
+      HashMap<String, Object> plan = courseService.getCategoryPlan(id);
+      String firstTime = DateUtil.dateToString(new Date(), false);
+      request.setAttribute("firstTime", firstTime);
+      request.setAttribute("plan", plan);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "jsp/study/editProfileCategoryPlan";
+  }
+  
+  @RequestMapping("/sendCategoryPlans")
+  @ResponseBody
+  public Json sendCategoryPlans(HttpServletRequest request) {
+    //CoursePlan coursePlan = null;
+    HashMap<String, Object> planMap = null;
+    int id = ParamUtils.getIntParameter(request, "id",0);
+    try {
+      planMap = courseService.getCategoryPlan(id);
+    } catch (Exception e1) {
+      e1.printStackTrace();
+    }
+    String name = (String)planMap.get("NAME");
+    String imageUrl = (String)planMap.get("PLAN_URL");
+    Date startDate = (Date)planMap.get("START_DATE");
+    Date endDate = (Date)planMap.get("END_DATE");
+    int categoryId = (Integer)planMap.get("CATEGORY_ID");
+    String categoryName = (String)planMap.get("CATEGORY_NAME");
+    long gradeId = (Long)planMap.get("GRADE_ID");
+    String insertContent =
+        " insert into term_plan (NAME, PLAN_URL,START_DATE,END_DATE,CATEGORY_ID,CATEGORY_NAME,GRADE_ID)" + " values ('" + name + "', "
+            + "'" + imageUrl + "'";
+    if(startDate != null){
+      insertContent += ",'"+startDate+"'";
+    }else{
+      insertContent += ",null";
+    }
+    if(endDate != null){
+      insertContent += ",'"+endDate+"'";
+    }else{
+      insertContent += ",null";
+    }
+    insertContent += ","+categoryId+",'"+categoryName+"'"+","+gradeId;
+    insertContent += "); commit; ";
+
+    String uploadDir =
+        request.getSession().getServletContext().getRealPath(imageUrl);
+    String uploadDirName = uploadDir.substring(uploadDir.lastIndexOf("\\") + 1, uploadDir.length());
+    System.out.println("uploadDir==" + uploadDir);
+    System.out.println("uploadDirName==" + uploadDirName);
+
+    String targetDir = "categoryPlan" + id;
+    String fileSqlName = "categoryPlan_" + id + ".sql";
+    Json json = new Json();
+    String fileName = SystemUtil.createUUID();
+    String destDirName = "d:/push_profile";
+    String targetDirs = destDirName + "/" + targetDir;
+    String picDir = targetDirs + "/pic";
+    String filesDir = targetDirs + "/file";
+    String path = destDirName + "/" + fileName + ".ini";
+    // FileOperation.createDir(picDir);
+    FileOperation.createDir(filesDir);
+    FileOperation.createDir(targetDirs);
+    FileOperation.createDir(destDirName);
+    String insertPath = destDirName + "/" + targetDir + "/" + fileSqlName;
+
+    String firstTime = request.getParameter("beginTime");
+    String endTime = request.getParameter("endTime");
+
+    try {
+      FileOperation.copyFile(new File(uploadDir), new File(filesDir + "/" + uploadDirName));
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+
+    try {
+      FileOperation.write(insertContent, insertPath, "UTF-8");
+
+      String content =
+          "[option] \r\n" + "Dir=" + targetDir + " \r\n" + "channelID=" + VersionInfo.CHANNELID
+              + " \r\n" + "priority=" + VersionInfo.PRIORITY + " \r\n" + "bandwidth="
+              + VersionInfo.BANDWIDTH + " \r\n" + "PackFile=" + VersionInfo.PACKFILE + " \r\n"
+              + "sendMode=" + VersionInfo.SENDMODE + " \r\n" + "sendTime=" + VersionInfo.SENDTIME
+              + " \r\n" + "repeatcount=" + VersionInfo.REPEATCOUNT + " \r\n" + "validRate="
+              + VersionInfo.VALIDRATE + " \r\n" + "startValidDate=" + firstTime + " \r\n"
+              + "endValidDate=" + endTime + " \r\n" + "Completed=0 \r\n";
+      FileOperation.contentToTxt(path, content);
+      courseService.setCategoryPlanStatus(id, 1);
+      json.setSuccess(true);
+      json.setMsg("下发成功!");
+    } catch (Exception e) {
+      json.setMsg("下发失败！");
+    }
+
+    return json;
+  }
   
 }
 

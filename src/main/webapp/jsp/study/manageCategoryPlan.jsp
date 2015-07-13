@@ -74,13 +74,25 @@ function getData(queryData){
 			sortable : true
 		},
 		{
+			field : 'STATUS',
+			title : '状态',
+			width : 150,
+			formatter : function(value, row, index) {
+				if(value == 1){
+					return '已投递';
+				}else{
+					return '未投递';
+				}
+			}
+		},
+		{
 			field : 'action',
 			title : '操作',
 			width : 100,
 			formatter : function(value, row, index) {
-                var e = '<a href="#" mce_href="#" onclick="editFun(\''+ row.id + '\')">编辑</a> ';  
-                var r = '<a href="#" mce_href="#" onclick="deleteFun(\''+ row.id +'\')">删除</a> ';  
-                var f = '<a href="#" mce_href="#" onclick="sendFun(\''+ row.id +'\')">推送</a> ';  
+                var e = '<a href="#" mce_href="#" onclick="editFun(\''+ row.ID + '\')">编辑</a> ';  
+                var r = '<a href="#" mce_href="#" onclick="deleteFun(\''+ row.ID +'\')">删除</a> ';  
+                var f = '<a href="#" mce_href="#" onclick="sendFun(\''+ row.ID +'\')">推送</a> ';  
                 return e+r+f;  
 			}
 		} ] ],
@@ -118,7 +130,7 @@ function sendFun(id){
 		title : '推送教学计划',
 		width : 600,
 		height : 500,
-		href : '${pageContext.request.contextPath}/courseController/editProfilCoursePlan.html?id=' + id,
+		href : '${pageContext.request.contextPath}/courseController/editProfileCategoryPlan.html?id=' + id,
 		buttons : [ {
 			text : '推送',
 			handler : function() {
@@ -158,10 +170,10 @@ function editFun(id) {
 		dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
 	}
 	parent.$.modalDialog({
-		title : '编辑课件',
+		title : '编辑规划',
 		width : 600,
 		height : 500,
-		href : '${pageContext.request.contextPath}/courseController/editCoursePlan.html?id=' + id,
+		href : '${pageContext.request.contextPath}/courseController/editCategoryPlan.html?id='+ id,
 		buttons : [ {
 			text : '编辑',
 			handler : function() {
@@ -187,7 +199,7 @@ function deleteFun(id) {
 					title : '提示',
 					text : '数据处理中，请稍后....'
 				});
-				$.post('${pageContext.request.contextPath}/courseController/removeCoursePlan.html', {
+				$.post('${pageContext.request.contextPath}/courseController/deleteCategoryPlan.html', {
 					id : id
 				}, function(result) {
 					if (result.success) {

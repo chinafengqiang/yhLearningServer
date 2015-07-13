@@ -356,4 +356,18 @@ public interface CourseService {
   public void updateCoursePlan(HashMap<String,String> plan);
   
   public HashMap<String,Object> getCoursePlanById(long id);
+  
+  public void saveCategoryPlan(HashMap<String,String> plan);
+  
+  public HashMap<String, Object> getCategoryById(int id);
+  
+  public HashMap<String,Object> getCategoryPlan(int id);
+  
+  public void updateCategoryPlan(HashMap<String,String> plan);
+  
+  public void deleteCategoryPlan(int id);
+  
+  public void setCoursePlanStatus(int id,int status);
+  
+  public void setCategoryPlanStatus(int id,int status);
 }

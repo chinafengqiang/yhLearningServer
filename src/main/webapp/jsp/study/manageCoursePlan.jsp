@@ -66,6 +66,18 @@ function getData(queryData){
 			width : 150
 		},
 		{
+			field : 'status',
+			title : '状态',
+			width : 150,
+			formatter : function(value, row, index) {
+				if(value == 1){
+					return '已投递';
+				}else{
+					return '未投递';
+				}
+			}
+		},
+		{
 			field : 'action',
 			title : '操作',
 			width : 100,
@@ -164,7 +176,7 @@ function editFun(id) {
 		} ]
 	});
 }
-
+ 
 //删除
 function deleteFun(id) {
 	if (id == undefined) {//点击右键菜单才会触发这个
