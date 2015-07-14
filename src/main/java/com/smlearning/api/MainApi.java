@@ -325,4 +325,14 @@ public class MainApi extends BaseController {
         apiService.getCoursePlan(classId, offset, pagesize, resMap);
         return resMap;
     }
+    
+    @RequestMapping("/getCategoryPlan")
+    @ResponseBody
+    public HashMap<String, Object> getCategoryPlan(HttpServletRequest request) {
+        int classId = ParamUtils.getIntParameter(request, "classId", 0);
+        HashMap<String, Object> resMap = new HashMap<String, Object>();
+        List<HashMap<String,Object>> resList = apiService.getCategoryPlanList(classId);
+        resMap.put("categoryPlanList",resList);
+        return resMap;
+    }
 }

@@ -370,4 +370,6 @@ public interface CourseService {
   public void setCoursePlanStatus(int id,int status);
   
   public void setCategoryPlanStatus(int id,int status);
+  
+  public List<HashMap<String,Object>> getCategoryPlan(long gradeId);
 }

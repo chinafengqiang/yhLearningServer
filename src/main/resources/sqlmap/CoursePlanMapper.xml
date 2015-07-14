@@ -288,4 +288,8 @@
        select * from term_plan where ID=#{id}
    </select>
    
+   <select id="getCategoryPlanList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      <![CDATA[ select * from term_plan where GRADE_ID=#{gradeId} and START_DATE <= #{time} and END_DATE >= #{time}]]>
+   </select>
+   
 </mapper>

@@ -476,6 +476,40 @@ public void getCoursePlan(int classId,int offset,int pagesize,HashMap<String,Obj
     e.printStackTrace();
   }
 }
+
+@Override
+public List<HashMap<String, Object>> getCategoryPlanList(int classId) {
+  List<HashMap<String,Object>> resList = new ArrayList<HashMap<String,Object>>();
+  try {
+    long gradeId = courseService.getGrade(classId);
+    if(gradeId > 0){
+      List<HashMap<String,Object>> list = courseService.getCategoryPlan(gradeId);
+      HashMap<String, Object> res = null;
+      if(list != null && list.size() > 0){
+        for(HashMap<String, Object> plan : list){
+          res = new HashMap<String, Object>();
+          res.put("id",plan.get("ID"));
+          res.put("name",plan.get("NAME"));
+          res.put("fileUrl",plan.get("PLAN_URL"));
+          Date startDate = (Date)plan.get("START_DATE");
+          Date endDate = (Date)plan.get("END_DATE");
+          if(startDate != null){
+            res.put("startDate",DateUtil.dateToString(startDate, true));
+          }
+          if(endDate != null){
+            res.put("endDate",DateUtil.dateToString(endDate, true));
+          }
+          res.put("categoryId",plan.get("CATEGORY_ID"));
+          res.put("categoryName",plan.get("CATEGORY_NAME"));
+          resList.add(res);
+        }
+      }
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  return resList;
+}
   
 
 

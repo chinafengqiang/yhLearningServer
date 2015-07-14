@@ -43,6 +43,6 @@ public interface IApi {
     public void getCoursePlan(int classId,int offset,int pagesize,HashMap<String,Object> resMap);
     
     
-    
+    public List<HashMap<String,Object>> getCategoryPlanList(int classId);
 
 }

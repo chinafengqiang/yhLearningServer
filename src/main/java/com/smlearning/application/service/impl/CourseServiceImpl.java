@@ -896,6 +896,14 @@ public HashMap<String, Object> getLessonMsgList(DataGridModel dm,
       map.put("STATUS",status);
       iacDB.updateDynamic("term_plan","ID",map);
     }
+
+    @Override
+    public List<HashMap<String, Object>> getCategoryPlan(long gradeId) {
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      map.put("gradeId",gradeId);
+      map.put("time",new Date());
+      return iacDB.getList("getCategoryPlanList", map);
+    }
   
     
     
