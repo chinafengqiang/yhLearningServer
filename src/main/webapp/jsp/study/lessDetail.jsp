@@ -43,7 +43,7 @@
 		parent.$.messager.progress('close');
 	});
 </script>
-<div id="racePop" class="raceShow">这里是弹出层效果</div>
+<!--<div id="racePop" class="raceShow">这里是弹出层效果</div>-->
 <div>
 			<table class="table table-hover table-condensed" style="text-align: center;">
 				<tr>
@@ -75,19 +75,19 @@
 // 渐变弹出层
 $(document).ready(function(){
  var speed = 600;//动画速度
- /*$("#race a").click(function(event){//绑定事件处理
+ $("#race a").click(function(event){//绑定事件处理
   event.stopPropagation();
-  //svar offset = $(event.target).offset();//取消事件冒泡
-  //s$("#racePop").css({ top:offset.top + $(event.target).height() + "px", left:offset.left });//设置弹出层位置
+  var offset = $(event.target).offset();//取消事件冒泡
+  $("#racePop").css({ top:offset.top + $(event.target).height() + "px", left:offset.left });//设置弹出层位置
   $("#racePop").show(speed);//动画显示
- });*/
+ });
  $(document).click(function(event) { $("#racePop").hide(speed) });//单击空白区域隐藏
  $("#racePop").click(function(event) { $("#racePop").hide(speed) });//单击弹出层则自身隐藏
 
 });
 
 function showPlan(lessonId,lessonNum){
-	 var speed = 600;//动画速度
+	var speed = 600;//动画速度
 	 $("#racePop").show(speed);
 	return;
 }
