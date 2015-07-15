@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.smlearning.domain.entity.CoursePlan;
 
-
 public interface IApi {
   
     public List<HashMap<String, Object>> getBookCategory(int classId);
